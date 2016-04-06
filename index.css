@@ -1,0 +1,20 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+
+html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+body {
+	overflow-x: hidden;
+	font-family: Oswald;
+	font-size: 100%;
+
+	-webkit-transition: background-image ease-in 0.5s;
+	-moz-transition: background-image ease-in 0.5s;
+	-ms-transition: background-image ease-in 0.5s; 
+	transition: background-image ease-in 0.5s;
+}
+
