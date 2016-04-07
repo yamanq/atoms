@@ -8,9 +8,11 @@ html {
 }
 
 body {
+	background-image: url("./resources/static/light.png");
 	overflow-x: hidden;
 	font-family: Oswald;
 	font-size: 100%;
+	margin: 0;
 
 	-webkit-transition: background-image ease-in 0.5s;
 	-moz-transition: background-image ease-in 0.5s;
@@ -18,3 +20,79 @@ body {
 	transition: background-image ease-in 0.5s;
 }
 
+td {
+    min-width:35px;
+    height: 50px;
+}
+
+.tDesc {
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	font-size: 150%;
+}
+
+.pulltab {
+	position: fixed;
+	margin-left: -6%;
+	padding: 0.5%;
+	width: 8%;
+	height: 4%;
+	background-color: #b3daff;
+	color: rgba(0,0,0,0);
+	box-shadow: 2px 2px 5px 3px #444;
+
+	-webkit-transition: transform 0.2s ease, margin 0.3s ease, color 0.4s ease;  
+	-moz-transition: transform 0.2s ease, margin 0.3s ease, color 0.4s ease; 
+	-ms-transition: transform 0.2s ease, margin 0.3s ease ,color 0.4s ease;
+	transition: transform 0.2s ease, margin 0.3s ease, color 0.4s ease; 
+}
+
+.pulltab:hover {
+	margin-left: 0%;
+	color: rgba(0,0,0,1)
+}
+
+.first {
+	margin-top:5%;
+
+}
+.second {
+	margin-top: 12%;
+}
+
+.sidebar {
+	position: absolute;
+	background-color: #e6f5ff;
+	margin-left: -60%;
+	padding: 15px 20px 15px 15px;
+	box-shadow: 2px 2px 5px 3px #444;
+	z-index:10;
+
+	-webkit-transition: margin 0.5s ease;  
+	-moz-transition: margin 0.5s ease; 
+	-ms-transition: margin 0.5s ease;
+	transition: margin 0.5s ease; 
+}
+
+.0 {
+	max-height: 40%;
+}
+.1 {
+	min-height: 100%;
+}
+
+.fa {
+	float: right;
+	font-size: 250% !important;
+	color: #585858;
+
+	-webkit-transition: color 0.5s ease;
+	-moz-transition: color 0.5s ease;
+	-ms-transition: color 0.5s ease; 
+	transition: color 0.5s ease;
+}
+
+.fa:hover {
+	color: #FF746B;
+}
