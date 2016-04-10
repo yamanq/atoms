@@ -1,12 +1,17 @@
 document.cookie = "theme=dark";
 document.cookie = "tbTheme=category";
 document.cookie = "unit=K";
-document.cookie = "elecConf=abr";
+document.cookie = "elecConf=norm";
+document.cookie = "atomTheme=category";
 
 var settings = {};
 var reader = new FileReader();
 var xhr = new XMLHttpRequest();
 var info;
+var colorChart = {
+	"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439",
+				 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"}		
+};
 
 function getJSON() {		 
 	xhr.open("GET","./resources/static/info.json", true);
@@ -133,10 +138,6 @@ function changeTheme(type) {
 }
 
 function tableTheme(theme) {
-	var colorChart = {
-		"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439",
-					 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"}		
-	};
 	for(var i = 0;i < 118;i++) {
 		get("td")[info["location"][i]].style.backgroundColor = colorChart[theme][info[theme][i]];
 	}
@@ -147,20 +148,40 @@ function tableDesc() {
 		 	 "oxidStat","elecConf"];
 	var unit = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", "", " g/mL", "",""];
 	var prefix = ["Element Name: ", "Atomic Radius: ", "Molecular Mass: ", "Ionization Energy: ", "Electron Affinity: ",
-				  "Electronegativity: ", "Room Temperature Phase: ", "Density: ", "Melting Point: ", "Boiling Point: ",
+				  "Electronegativity: ", "Phase/State: ", "Density: ", "Melting Point: ", "Boiling Point: ",
 				  "Oxidation State(s): ", "Electron Configuration: "];
 	var states = {"g":"Gas","l":"Liquid","s":"Solid","Unknown":"Unknown"};
+
+	var infoBox = document.createElement("div");
+	infoBox.className = "infoBox";
+
+	get("elements").appendChild(infoBox);
+	var div = document.createElement("div");
+	div.className = "info1";
+	get("infoBox").appendChild(div);
+	var div2 = document.createElement("div");
+	div2.className = "info2";
+	get("infoBox").appendChild(div2);
 
 	for(var i = 0;i < p.length; i++) {
 		elem = document.createElement("p");
 		elem.className = "eDesc " + p[i];
-	 	get("elements").appendChild(elem);
+		if(i <= 6) {
+	 		get("info1").appendChild(elem);
+		} else {
+			get("info2").appendChild(elem);
+		}
 	}
+	get("info2").appendChild(document.createElement("br"));
+
+	box = document.createElement("div");
+	box.className = "preview";
+	get("infoBox").appendChild(box);
 
 	for(var i = 0;i < 118;i++) {
 		var cell = get("td")[info["location"][i]];
 		cell.onmouseenter = function() {
-			index = parseInt(this.childNodes[0].childNodes[0].nodeValue-1);
+			var index = parseInt(this.childNodes[0].childNodes[0].nodeValue-1);
 			for(var i = 0;i < p.length; i++) {
 				if(i == 8 || i == 9) {
 					if(info[p[i]][settings["unit"]][index] !== null) {
@@ -219,6 +240,9 @@ function tableDesc() {
 									}	
 								}
 								for(var j = 0;j < elecConf.length-1; j+=2) {
+									if(j == 20) {
+										para.appendChild(document.createElement("br"))
+									}
 									para.appendChild(document.createTextNode(elecConf[j]));
 									var sup = document.createElement("sup");
 									sup.appendChild(document.createTextNode(elecConf[j+1]));
@@ -233,13 +257,15 @@ function tableDesc() {
 						changeText(p[i],prefix[i] + "Unknown");
 					}
 				}
-			}	
+			}
+			try { get("preview").removeChild(get("preview").firstChild); } catch(err){}
+			get("preview").appendChild(getAtomDOM(index,get("preview").style.height = window.innerHeight/3.8));
 		}
 	}
 }
 
 function changeText(dom,text) {
-	dom = get(dom);
+	var dom = get(dom);
 	while (dom.firstChild) {
     	dom.removeChild(dom.firstChild);
 	}
@@ -247,6 +273,41 @@ function changeText(dom,text) {
 	dom.childNodes[0].nodeValue = text;
 }
 
+function getAtomDOM(atomNum, size) {
+	var holder = document.createElement("div");
+	holder.style.position = "relative";
+	holder.style.height = size;
+	holder.style.width = size;
+
+	var atom = document.createElement("img");
+	atom.src = "./resources/reactive/Ring" + info["valeElec"][atomNum] + ".gif";
+	atom.style.height = size;
+	atom.style.width = size;
+	atom.style.position = "absolute";
+	atom.style.top = "0";
+	atom.style.left = "0";
+
+	var circle = document.createElement("div");
+	circle.style.borderRadius = "50%";
+	circle.style.height = size*0.8;
+	circle.style.width = size*0.8;
+	circle.style.margin = "0 auto";
+	circle.style.position = "absolute";
+	circle.style.top = size*0.1;
+	circle.style.left = size*0.1;
+	circle.style.backgroundColor = colorChart[settings["atomTheme"]][info[settings["atomTheme"]][atomNum]];
+
+	var sh = document.createElement("p");
+	sh.appendChild(document.createTextNode(info["shorthand"][atomNum]));
+	sh.className = "sh";
+
+	circle.appendChild(sh);
+	
+	holder.appendChild(circle)
+	holder.appendChild(atom);
+
+	return holder;
+}
 // Button Clicks
 
 get("theme").onclick = function() {
@@ -280,4 +341,5 @@ setTimeout(function mainFunc() {
 	changeTheme(settings["theme"]);
 	tableTheme(settings["tbTheme"]);
 	tableDesc();
+
 }, 600)	
