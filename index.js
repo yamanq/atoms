@@ -149,7 +149,7 @@ function tableDesc() {
 	var prefix = ["Element Name: ", "Atomic Radius: ", "Molecular Mass: ", "Ionization Energy: ", "Electron Affinity: ",
 				  "Electronegativity: ", "Room Temperature Phase: ", "Density: ", "Melting Point: ", "Boiling Point: ",
 				  "Oxidation State(s): ", "Electron Configuration: "];
-	var states = {"g":"Gas","l":"Liquid","s":"Solid","N/A":"N/A"};
+	var states = {"g":"Gas","l":"Liquid","s":"Solid","Unknown":"Unknown"};
 
 	for(var i = 0;i < p.length; i++) {
 		elem = document.createElement("p");
@@ -166,7 +166,7 @@ function tableDesc() {
 					if(info[p[i]][settings["unit"]][index] !== null) {
 						changeText(p[i],prefix[i] + info[p[i]][settings["unit"]][index] + " " + settings["unit"]);
 					} else {
-						changeText(p[i],prefix[i] + "N/A");
+						changeText(p[i],prefix[i] + "Unknown");
 					}
 				} else {
 					if(info[p[i]][index] != null) {
@@ -230,7 +230,7 @@ function tableDesc() {
 						}
 						
 					} else {
-						changeText(p[i],prefix[i] + "N/A");
+						changeText(p[i],prefix[i] + "Unknown");
 					}
 				}
 			}	
