@@ -370,6 +370,13 @@ function makeSettings() {
 	}
 }
 
+if(document.cookie == "") {
+	document.cookie = "theme=light";
+	document.cookie = "tbTheme=category;";
+	document.cookie = "atomTheme=category;";
+	document.cookie = "elecConf=abr;";
+	document.cookie = "unit=K;"
+}
 
 getJSON();
 
