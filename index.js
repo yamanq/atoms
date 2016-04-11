@@ -1,14 +1,15 @@
-//Temp settings
-document.cookie = "tbTheme=category";
-document.cookie = "unit=K";
-document.cookie = "elecConf=norm";
-document.cookie = "atomTheme=category";
-
 // Global Variables
 var settings = {};
 var reader = new FileReader();
 var xhr = new XMLHttpRequest();
 var info;
+var options = ["theme","tbTheme","atomTheme","elecConf","unit"];
+var choices = [
+	["light","dark"],["category"],["category"],["abr","norm"],["K","C","F"]
+];
+var choicesDisplay = [
+	["Light","Dark"],["Category"],["Category"],["Abbreviated","Full"],["Kelvin","Celsius","Fahrenheit"],
+];
 var colorChart = {
 	"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439",
 				 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"}		
@@ -82,7 +83,6 @@ function update() {
 		var set = cooked[i].split("=");
 		settings[set[0].replace(" ","")] = set[1];
 	}
-
 	applyChanges();
 }
 
@@ -126,9 +126,15 @@ function createTable() {
 
 }
 
-function updateText() {
-	//add more modes later
-	get("theme").innerHTML = settings["theme"];
+function updateSettingText() {
+	var displayText = {
+		"dark":"Dark","light":"Light","category":"Category","abr":"Abbreviated","norm":"Full","K":"Kelvin","C":"Celsius",
+		"F":"Fahrenheit"}; //Add for all cookie settings
+	var options = ["theme","tbTheme","atomTheme","elecConf","unit"];
+
+	for(var i = 0; i < options.length; i++) {
+		get(options[i]).innerHTML = displayText[settings[i]];
+	}
 }
 
 function changeTheme(type) {
@@ -137,9 +143,8 @@ function changeTheme(type) {
 		"sidebar": {'light':'#E6F5FF','dark':'#FF5858'} 
 	};
 	get("body").style.backgroundImage = "url('./resources/static/" + type +".png')";
-	console.log("hi");
+
 	for(var i = 0; i < get("pulltab").length; i++) {
-		console.log("hi");
 		get("pulltab")[i].style.backgroundColor = theme["pulltab"][type];
 		get("sidebar")[i].style.backgroundColor = theme["sidebar"][type];
 	}
@@ -316,21 +321,8 @@ function getAtomDOM(atomNum, size) {
 
 	return holder;
 }
-// Button Clicks
 
-get("theme").onclick = function() {
-	var theme = get("theme").childNodes[0].nodeValue;
-	if(theme == "Dark") {
-		deleteCookie("theme");
-		document.cookie = "theme=light";
-		get("theme").childNodes[0].nodeValue = "Light";
-	} else {
-		deleteCookie("theme");
-		document.cookie = "theme=dark";
-		get("theme").childNodes[0].nodeValue = "Dark";
-	}
-	update();
-}
+// Button Clicks
 
 get("pulltab")[0].onclick = function(){open(get("elements"));}
 get("pulltab")[1].onclick = function(){open(get("settings"));}
@@ -345,10 +337,45 @@ function open(dom) {
 	dom.style.marginLeft = "0%";
 }
 
+function makeSettings() {
+	for(var i = 0; i<options.length;i++) {
+		var parent = get("option")[i];
+		var text = document.createElement("p");
+		text.appendChild(document.createTextNode(choicesDisplay[i][choices[i].indexOf(settings[parent.id])]))
+		parent.appendChild(text);
+		var holder = document.createElement("div");
+		holder.className = "dropdown";
+
+		parent.appendChild(holder);
+		parent.onclick = function() {
+			this.childNodes[1].style.opacity = "1";
+		}
+		holder.onmouseleave = function() {
+			this.style.opacity = "0";
+		}
+		for(var j = 0;j < choices[i].length;j++) {
+			var p = document.createElement("p");
+			p.className = i.toString() + j.toString();
+			p.appendChild(document.createTextNode(choicesDisplay[i][j]))
+			holder.appendChild(p);
+			p.onclick = function() {
+				setting = this.parentNode.parentNode.id;
+				this.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue = this.innerHTML;
+				this.parentNode.style.opacity = "0"; // Doesn't work, no idea why. Perhaps you can't change style of parent nodes?
+				deleteCookie(setting);
+				document.cookie = setting+"="+choices[parseInt(this.className[0])][parseInt(this.className[1])];
+				update();
+			}
+		}
+	}
+}
+
+
 getJSON();
+
 setTimeout(function mainFunc() {
 	createTable();
 	update();
-	updateText();
+	makeSettings();
 	tableDesc();
 }, 600)	
