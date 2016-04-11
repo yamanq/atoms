@@ -1,9 +1,10 @@
-document.cookie = "theme=dark";
+//Temp settings
 document.cookie = "tbTheme=category";
 document.cookie = "unit=K";
 document.cookie = "elecConf=norm";
 document.cookie = "atomTheme=category";
 
+// Global Variables
 var settings = {};
 var reader = new FileReader();
 var xhr = new XMLHttpRequest();
@@ -69,11 +70,9 @@ function get(name) {
 	} else { return elements; } 
 }
 
-/*function replaceCookie(setting, newSetting, index) {
-	document.cookie = document.cookie
-	.substring(0,document.cookie.indexOf(setting)+setting.length+1) + newSetting +
-	document.cookie.substring(document.cookie.split(";",index).join(";").length);
-}*/
+function deleteCookie(setting) {
+	document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
+}
 
 function update() {
 	var cookie = document.cookie;
@@ -83,10 +82,13 @@ function update() {
 		var set = cooked[i].split("=");
 		settings[set[0].replace(" ","")] = set[1];
 	}
+
+	applyChanges();
 }
 
-function open(dom) {
-	dom.style.marginLeft = "0%";
+function applyChanges() {
+	changeTheme(settings["theme"]);
+	tableTheme(settings["tbTheme"]);
 }
 
 function createTable() {
@@ -124,17 +126,23 @@ function createTable() {
 
 }
 
+function updateText() {
+	//add more modes later
+	get("theme").innerHTML = settings["theme"];
+}
+
 function changeTheme(type) {
 	var theme = {
 		"pulltab": {'light': '#B3DAFF','dark': '#F33333'},
 		"sidebar": {'light':'#E6F5FF','dark':'#FF5858'} 
-	}
+	};
 	get("body").style.backgroundImage = "url('./resources/static/" + type +".png')";
-
-	get("pulltab")[0].style.backgroundColor = theme["pulltab"][type];
-	get("pulltab")[1].style.backgroundColor = theme["pulltab"][type];
-	get("sidebar")[0].style.backgroundColor = theme["sidebar"][type];
-	get("sidebar")[1].style.backgroundColor = theme["sidebar"][type];
+	console.log("hi");
+	for(var i = 0; i < get("pulltab").length; i++) {
+		console.log("hi");
+		get("pulltab")[i].style.backgroundColor = theme["pulltab"][type];
+		get("sidebar")[i].style.backgroundColor = theme["sidebar"][type];
+	}
 }
 
 function tableTheme(theme) {
@@ -166,7 +174,7 @@ function tableDesc() {
 	for(var i = 0;i < p.length; i++) {
 		elem = document.createElement("p");
 		elem.className = "eDesc " + p[i];
-		if(i <= 6) {
+		if(i <= 5) {
 	 		get("info1").appendChild(elem);
 		} else {
 			get("info2").appendChild(elem);
@@ -312,12 +320,13 @@ function getAtomDOM(atomNum, size) {
 
 get("theme").onclick = function() {
 	var theme = get("theme").childNodes[0].nodeValue;
-	console.log("hi");
 	if(theme == "Dark") {
-		//replaceCookie("theme","light",1);
+		deleteCookie("theme");
+		document.cookie = "theme=light";
 		get("theme").childNodes[0].nodeValue = "Light";
 	} else {
-		//replaceCookie("theme","dark",1);
+		deleteCookie("theme");
+		document.cookie = "theme=dark";
 		get("theme").childNodes[0].nodeValue = "Dark";
 	}
 	update();
@@ -332,14 +341,14 @@ get("fa")[1].onclick = function(){
 	get("settings").style.marginLeft = "-20%";
 }
 
-
+function open(dom) {
+	dom.style.marginLeft = "0%";
+}
 
 getJSON();
 setTimeout(function mainFunc() {
 	createTable();
 	update();
-	changeTheme(settings["theme"]);
-	tableTheme(settings["tbTheme"]);
+	updateText();
 	tableDesc();
-
 }, 600)	
