@@ -4,15 +4,33 @@ var reader = new FileReader();
 var xhr = new XMLHttpRequest();
 var info;
 var options = ["theme","tbTheme","atomTheme","elecConf","unit"];
+
 var choices = [
-	["light","dark"],["category"],["category"],["abr","norm"],["K","C","F"]
+	["light","dark"],
+	["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
+	["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
+	["abr","norm"],
+	["K","C","F"]
 ];
 var choicesDisplay = [
-	["Light","Dark"],["Category"],["Category"],["Abbreviated","Full"],["Kelvin","Celsius","Fahrenheit"],
+	["Light","Dark"],
+	["Category", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
+	["Category", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
+	["Abbreviated","Full"],
+	["Kelvin","Celsius","Fahrenheit"]
 ];
+
 var colorChart = {
 	"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439",
-				 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"}		
+				 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"},
+	"atomRadi": ["#151618", "#2C7BF2"],
+	"moleWeig": ["#151618","#2C7BF2"],
+	"ioniEner":["#E2DC27","#5535D4"],
+	"elecAffi": ["#E2DC27","#5535D4"],
+	"elecNega": ["#E2DC27","#5535D4"],
+	"density": ["#151618","#2C7BF2"],
+	"melting": ["#D7301E", "#69F2F2"],
+	"boiling": ["#D7301E", "#69F2F2"]		
 };
 
 function getJSON() {		 
@@ -27,12 +45,7 @@ function getJSON() {
 
 function changeColor(hex, amt) {
 
-    var usePound = false;
-
-    if (hex[0] == "#") {
-        hex = hex.slice(1);
-        usePound = true;
-    }
+	hex = hex.slice(1);
     var num = parseInt(hex,16);
     var r = (num >> 16) + amt;
  
@@ -49,7 +62,7 @@ function changeColor(hex, amt) {
     if (g > 255) g = 255;
     else if (g < 0) g = 0;
  
-    return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
+    return "#" + (g | (b << 8) | (r << 16)).toString(16);
 }
 
 function gradientColor(hex1, hex2, ratio) {
@@ -181,7 +194,7 @@ function changeTheme(type) {
 
 function tableTheme(theme) {
 	for(var i = 0;i < 118;i++) {
-		get("td")[info["location"][i]].style.backgroundColor = colorChart[theme][info[theme][i]];
+		get("td")[info["location"][i]].style.backgroundColor = getColor(theme, i);
 	}
 }
 
@@ -302,7 +315,7 @@ function tableDesc() {
 				}
 			}
 			try { get("preview").removeChild(get("preview").firstChild); } catch(err){}
-			get("preview").appendChild(getAtomDOM(index,get("preview").style.height = window.innerHeight/3.8));
+			get("preview").appendChild(getAtomDOM(index,window.innerHeight/3.8));
 					
 		}
 	}
@@ -339,7 +352,8 @@ function getAtomDOM(atomNum, size) {
 	circle.style.position = "absolute";
 	circle.style.top = size*0.1;
 	circle.style.left = size*0.1;
-	circle.style.backgroundColor = colorChart[settings["atomTheme"]][info[settings["atomTheme"]][atomNum]];
+	
+	circle.style.backgroundColor = getColor(settings["atomTheme"],atomNum);
 
 	var sh = document.createElement("p");
 	sh.appendChild(document.createTextNode(info["shorthand"][atomNum]));
@@ -353,6 +367,27 @@ function getAtomDOM(atomNum, size) {
 	return holder;
 }
 
+function getColor(theme, atomNum) {
+	if(theme == "category") {
+		var color = colorChart[theme][info[theme][atomNum]];	
+	} else if(theme == "melting" || theme == "boiling") {
+		if(info[theme]["K"][atomNum] == null) {
+			color = "#41484D";
+		} else {
+			var ratio = (info[theme]["K"][atomNum] - Math.min.apply(null,info[theme]["K"])) / (Math.max.apply(null,info[theme]["K"]) - Math.min.apply(null,info[theme]["K"]));
+			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio);
+		}	
+	} else {
+		if(info[theme][atomNum] == null) {
+			color = "#41484D";
+		} else {
+			var ratio = (info[theme][atomNum] - Math.min.apply(null,info[theme])) / (Math.max.apply(null,info[theme]) - Math.min.apply(null,info[theme]));
+			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio);
+		}
+	}
+
+	return color;
+}
 // Button Clicks
 
 get("pulltab")[0].onclick = function(){open(get("elements"));}
@@ -380,9 +415,15 @@ function makeSettings() {
 		parent.appendChild(holder);
 		parent.onclick = function() {
 			this.childNodes[1].style.opacity = "1";
+			this.childNodes[1].style.display = "flex";
+		}
+		parent.onmouseleave = function() {
+			this.childNodes[1].style.opacity = "0";
+			this.childNodes[1].display = "none";
 		}
 		holder.onmouseleave = function() {
 			this.style.opacity = "0";
+			this.style.display = "none";
 		}
 		for(var j = 0;j < choices[i].length;j++) {
 			var p = document.createElement("p");
