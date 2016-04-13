@@ -52,6 +52,45 @@ function changeColor(hex, amt) {
     return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
 }
 
+function gradientColor(hex1, hex2, ratio) {
+
+
+	// Splits hex1 into 3 pieces (2 char each)
+	hex1 = hex1.replace("#", "").match(/.{1,2}/g);
+	// Converts each one into int
+
+	for (var i = 0; i <= 2; i++) {
+		hex1[i] = parseInt(hex1[i], 16);
+	}
+
+	// Does above process for hex2
+
+	hex2 = hex2.replace("#", "").match(/.{1,2}/g);
+
+	for (var i = 0; i <= 2; i++) {
+		hex2[i] = parseInt(hex2[i], 16);
+	}
+
+	// Creates end table for finished hex parts
+
+	donetable = [];
+
+	// Averages each of the three parts between hex1 and hex2
+
+	for (var i = 0; i <= 2; i++) {
+
+		// Weighted average to get exact gradient necessary and not average
+		// Round to prevent weird hex decimal shenanigans
+		val = Math.round((ratio) * hex1[i] + (1 - ratio) * hex2[i]);
+		donetable[i] = val.toString(16);
+	}
+
+	// Rejoins hex and adds #
+	done = "#" + donetable.join("");
+
+	return done;
+}
+
 function get(name) {
 	var elements = [];
 	if(document.getElementsByClassName(name).length > 0) {
