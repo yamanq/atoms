@@ -37,8 +37,13 @@ td {
 
 }
 
-td:hover {
+.atom:hover {
 	box-shadow:inset 0 0 0 99999px rgba(0,0,0,0.2);
+}
+
+img {
+	-webkit-filter: drop-shadow(4px 4px 3px #444);
+	filter: drop-shadow(4px 4px 3px #444);
 }
 
 .desc {

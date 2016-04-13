@@ -122,19 +122,9 @@ function createTable() {
     	cells[info["location"][i]].appendChild(ele);
     	text = document.createTextNode(info["shorthand"][i]);
     	cells[info["location"][i]].appendChild(text);
+    	cells[info["location"][i]].className = "atom";
     }
 
-}
-
-function updateSettingText() {
-	var displayText = {
-		"dark":"Dark","light":"Light","category":"Category","abr":"Abbreviated","norm":"Full","K":"Kelvin","C":"Celsius",
-		"F":"Fahrenheit"}; //Add for all cookie settings
-	var options = ["theme","tbTheme","atomTheme","elecConf","unit"];
-
-	for(var i = 0; i < options.length; i++) {
-		get(options[i]).innerHTML = displayText[settings[i]];
-	}
 }
 
 function changeTheme(type) {
@@ -193,7 +183,8 @@ function tableDesc() {
 
 	for(var i = 0;i < 118;i++) {
 		var cell = get("td")[info["location"][i]];
-		cell.onmouseenter = function() {
+
+		cell.onclick = function() {
 			var index = parseInt(this.childNodes[0].childNodes[0].nodeValue-1);
 			for(var i = 0;i < p.length; i++) {
 				if(i == 8 || i == 9) {
@@ -273,6 +264,7 @@ function tableDesc() {
 			}
 			try { get("preview").removeChild(get("preview").firstChild); } catch(err){}
 			get("preview").appendChild(getAtomDOM(index,get("preview").style.height = window.innerHeight/3.8));
+					
 		}
 	}
 }
