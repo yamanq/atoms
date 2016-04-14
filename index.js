@@ -122,14 +122,24 @@ function deleteCookie(setting) {
 	document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
 }
 
-function createLegend() {
+function createGradientLegend() {
 	// Create Table element
 	var tbl = document.createElement('table');
 	
 	// Adds Class for styling
 	tbl.className = "legend";
 
-	// Creates 
+	// Creates a gradient of 100 values wide (j) for good transition
+	// Table is also 30 tall (i) for easy viewing
+	for(var i = 0; i < 1; i++) {
+        var tr = tbl.insertRow();
+        for(var j = 0; j < 50; j++) {
+            var td = tr.insertCell();
+        }
+    }
+
+    // Adds table to sidebar
+    get("sidebar")[0].appendChild(tbl);
 }
 
 function createTable() {
@@ -146,9 +156,8 @@ function createTable() {
     }
    	get("sidebar")[0].appendChild(tbl);
 
-   	// Repeat of process above for inner transition
+   	// Repeat of process above for Lanthanides and Actinides
    	tbl = document.createElement('table');
-    tbl.style.border = "1px hidden";
     tbl.className = "extension";
     for(var i = 0; i < 2; i++) {
         var tr = tbl.insertRow();
@@ -509,6 +518,7 @@ getJSON();
 
 setTimeout(function mainFunc() {
 	createTable();
+	// createGradientLegend();
 	update();
 	makeSettings();
 	tableDesc();

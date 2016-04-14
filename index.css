@@ -181,6 +181,7 @@ img {
 
 .legend {
 	border: 1px solid;
+	background-color: red;
 }
 
 .normal {
@@ -188,6 +189,7 @@ img {
 	margin: 3%;
 }
 .extension {
+	border: 1px hidden;
 	margin-top:3%;
 	margin-left: 10%;
 }
