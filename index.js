@@ -170,7 +170,7 @@ function update() {
 
 	// For all settings, append into object format
 
-	for(var i = 0; i < cooked.length; i++) {
+	for(var i = 0; i < cookieArray.length; i++) {
 		var set = cookieArray[i].split("=");
 		settings[set[0].replace(" ","")] = set[1];
 	}
@@ -246,7 +246,7 @@ function tableDesc() {
 		var cell = get("td")[info["location"][i]]; // Gets location of each atom in order
 
 		cell.onclick = function() {
-			var index = i; 
+			var index = parseInt(this.childNodes[0].childNodes[0].nodeValue-1); 
 			for(var i = 0;i < p.length; i++) { // Loop through all data types to be displayed
 				if(i == 8 || i == 9) { // If data type is melting or boiling
 					if(info[p[i]][settings["unit"]][index] !== null) {
@@ -269,19 +269,34 @@ function tableDesc() {
 							}
 
 							var allStates = info[p[i]][index];
-							para.appendChild(document.createTextNode(prefix[i]));
+							var para1 = document.createElement("span");
+							para1.appendChild(document.createTextNode(prefix[i]));
+							para.appendChild(para1);
 
 							for(var j = 0;j < allStates.length; j++) { // For all states in array
 								oxidStat = allStates[j];
-								if(allStates[j].includes("b")) { // If value has b, put value in <bold> tag
+								if(j == 6) { // Add new line to prevent overflow
+									para.appendChild(document.createElement("br"))
+								}
+								if(allStates[j].includes("b")) { // If value has b, make value different
 									oxidStat = allStates[j].substring(1);
-									var bold = document.createElement("b");
-									bold.appendChild(document.createTextNode(oxidStat));
-									para.appendChild(bold);
-									para.appendChild(document.createTextNode(", "));
+									var par = document.createElement("p");
+									par.appendChild(document.createTextNode(oxidStat));
+									par.className = "oxid common";
+									para.appendChild(par);
+									var par = document.createElement("span");
+									par.className = "comma"
+									par.appendChild(document.createTextNode(", "))
+									para.appendChild(par);
 								} else {
-									para.appendChild(document.createTextNode(oxidStat));
-									para.appendChild(document.createTextNode(", "));
+									var pa = document.createElement("p");
+									pa.appendChild(document.createTextNode(oxidStat));
+									pa.className = "oxid";
+									para.appendChild(pa);
+									pa = document.createElement("span");
+									pa.className = "comma"
+									pa.appendChild(document.createTextNode(", "))
+									para.appendChild(pa);
 								}
 							}
 							para.removeChild(para.lastChild); // Remove last comma
@@ -319,7 +334,7 @@ function tableDesc() {
 
 								// Add 2 to get to next non superscript and subtract one to prevent undefined
 								for(var j = 0;j < elecConf.length-1; j+=2) {
-									if(j == 20) { // Add new line if on 10th different level 
+									if(j == 20) { // Add new line to prevent overflow
 										para.appendChild(document.createElement("br"))
 									}
 									para.appendChild(document.createTextNode(elecConf[j])); // Append electron level
