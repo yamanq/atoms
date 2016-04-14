@@ -3,19 +3,17 @@ var settings = {};
 var reader = new FileReader();
 var xhr = new XMLHttpRequest();
 var info;
-var options = ["theme","tbTheme","atomTheme","elecConf","unit"];
+var options = ["theme","displayTheme","elecConf","unit"];
 
 
 var choices = [
 	["light","dark"],
-	["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
 	["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
 	["abr","norm"],
 	["K","C","F"]
 ];
 var choicesDisplay = [
 	["Light","Dark"],
-	["Category", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
 	["Category", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
 	["Abbreviated","Full"],
 	["Kelvin","Celsius","Fahrenheit"]
@@ -179,7 +177,7 @@ function update() {
 
 function applyChanges() {
 	changeTheme(settings["theme"]);
-	tableTheme(settings["tbTheme"]);
+	tableTheme(settings["displayTheme"]);
 }
 
 function changeTheme(type) {
@@ -394,7 +392,7 @@ function getAtomDOM(atomNum, size) {
 	circle.style.top = size*0.1;
 	circle.style.left = size*0.1;
 	
-	circle.style.backgroundColor = getColor(settings["atomTheme"],atomNum);
+	circle.style.backgroundColor = getColor(settings["displayTheme"],atomNum);
 
 	var sh = document.createElement("p");
 	sh.appendChild(document.createTextNode(info["shorthand"][atomNum]));
@@ -492,8 +490,7 @@ function makeSettings() {
 
 if(document.cookie == "") { // Set defaults if no cookie
 	document.cookie = "theme=light";
-	document.cookie = "tbTheme=category;";
-	document.cookie = "atomTheme=category;";
+	document.cookie = "displayTheme=category;";
 	document.cookie = "elecConf=abr;";
 	document.cookie = "unit=K;"
 }
