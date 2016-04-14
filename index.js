@@ -14,7 +14,7 @@ var choices = [
 ];
 var choicesDisplay = [
 	["Light","Dark"],
-	["Category", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
+	["Region", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
 	["Abbreviated","Full"],
 	["Kelvin","Celsius","Fahrenheit"]
 ];
