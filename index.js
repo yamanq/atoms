@@ -5,6 +5,7 @@ var xhr = new XMLHttpRequest();
 var info;
 var options = ["theme","tbTheme","atomTheme","elecConf","unit"];
 
+
 var choices = [
 	["light","dark"],
 	["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
@@ -32,6 +33,7 @@ var colorChart = {
 	"melting": ["#D7301E", "#69F2F2"],
 	"boiling": ["#D7301E", "#69F2F2"]		
 };
+
 
 function getJSON() {		 
 	xhr.open("GET","./resources/static/info.json", true);
@@ -67,7 +69,6 @@ function changeColor(hex, amt) {
 
 function gradientColor(hex1, hex2, ratio) {
 
-
 	// Splits hex1 into 3 pieces (2 char each)
 	hex1 = hex1.replace("#", "").match(/.{1,2}/g);
 	// Converts each one into int
@@ -77,21 +78,15 @@ function gradientColor(hex1, hex2, ratio) {
 	}
 
 	// Does above process for hex2
-
 	hex2 = hex2.replace("#", "").match(/.{1,2}/g);
-
 	for (var i = 0; i <= 2; i++) {
 		hex2[i] = parseInt(hex2[i], 16);
 	}
 
 	// Creates end table for finished hex parts
-
 	donetable = [];
-
 	// Averages each of the three parts between hex1 and hex2
-
 	for (var i = 0; i <= 2; i++) {
-
 		// Weighted average to get exact gradient necessary and not average
 		// Round to prevent weird hex decimal shenanigans
 		val = Math.round((ratio) * hex1[i] + (1 - ratio) * hex2[i]);
@@ -105,6 +100,7 @@ function gradientColor(hex1, hex2, ratio) {
 }
 
 function get(name) {
+	// Condensed format for document.getX
 	var elements = [];
 	if(document.getElementsByClassName(name).length > 0) {
 		elements = document.getElementsByClassName(name);
@@ -124,29 +120,16 @@ function get(name) {
 }
 
 function deleteCookie(setting) {
+	// Sets expiration date to past date, deleting cookie automatically
 	document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
-}
-
-function update() {
-	var cookie = document.cookie;
-	var cooked = cookie.split(";");
-
-	for(var i = 0; i < cooked.length; i++) {
-		var set = cooked[i].split("=");
-		settings[set[0].replace(" ","")] = set[1];
-	}
-	applyChanges();
-}
-
-function applyChanges() {
-	changeTheme(settings["theme"]);
-	tableTheme(settings["tbTheme"]);
 }
 
 function createTable() {
     var tbl = document.createElement('table');
     tbl.style.border = "1px hidden";
     tbl.className = "normal";
+
+    // Creates table width j, height i
     for(var i = 0; i < 7; i++) {
         var tr = tbl.insertRow();
         for(var j = 0; j < 18; j++) {
@@ -155,6 +138,7 @@ function createTable() {
     }
    	get("sidebar")[0].appendChild(tbl);
 
+   	// Repeat of process above for inner transition
    	tbl = document.createElement('table');
     tbl.style.border = "1px hidden";
     tbl.className = "extension";
@@ -166,17 +150,36 @@ function createTable() {
     }
    	get("sidebar")[0].appendChild(tbl);
 
+   	// Creates text for the periodic table
     cells = get("td");
     for(var i = 0;i < 118;i++) {
     	ele = document.createElement("p");
-    	text = document.createTextNode(i+1);
+    	text = document.createTextNode(i+1); // i+1 to offset 0
     	ele.appendChild(text);
     	cells[info["location"][i]].appendChild(ele);
     	text = document.createTextNode(info["shorthand"][i]);
     	cells[info["location"][i]].appendChild(text);
-    	cells[info["location"][i]].className = "atom";
+    	cells[info["location"][i]].className = "atom"; // Adds class to prevent hover animation on blank cells
     }
 
+}
+
+function update() {
+	var cookie = document.cookie;
+	var cookieArray = cookie.split(";");
+
+	// For all settings, append into object format
+
+	for(var i = 0; i < cooked.length; i++) {
+		var set = cookieArray[i].split("=");
+		settings[set[0].replace(" ","")] = set[1];
+	}
+	applyChanges();
+}
+
+function applyChanges() {
+	changeTheme(settings["theme"]);
+	tableTheme(settings["tbTheme"]);
 }
 
 function changeTheme(type) {
@@ -184,8 +187,11 @@ function changeTheme(type) {
 		"pulltab": {'light': '#B3DAFF','dark': '#F33333'},
 		"sidebar": {'light':'#E6F5FF','dark':'#FF5858'} 
 	};
+
+	// Changes background image
 	get("body").style.backgroundImage = "url('./resources/static/" + type +".png')";
 
+	// Changes interface element colors
 	for(var i = 0; i < get("pulltab").length; i++) {
 		get("pulltab")[i].style.backgroundColor = theme["pulltab"][type];
 		get("sidebar")[i].style.backgroundColor = theme["sidebar"][type];
@@ -194,6 +200,7 @@ function changeTheme(type) {
 
 function tableTheme(theme) {
 	for(var i = 0;i < 118;i++) {
+		// Changes background color of each cell
 		get("td")[info["location"][i]].style.backgroundColor = getColor(theme, i);
 	}
 }
@@ -207,6 +214,7 @@ function tableDesc() {
 				  "Oxidation State(s): ", "Electron Configuration: "];
 	var states = {"g":"Gas","l":"Liquid","s":"Solid","Unknown":"Unknown"};
 
+	// Setting up divs for organization
 	var infoBox = document.createElement("div");
 	infoBox.className = "infoBox";
 
@@ -233,33 +241,39 @@ function tableDesc() {
 	box.className = "preview";
 	get("infoBox").appendChild(box);
 
+	// Creates 'reactivity' for each cell
 	for(var i = 0;i < 118;i++) {
-		var cell = get("td")[info["location"][i]];
+		var cell = get("td")[info["location"][i]]; // Gets location of each atom in order
 
 		cell.onclick = function() {
-			var index = parseInt(this.childNodes[0].childNodes[0].nodeValue-1);
-			for(var i = 0;i < p.length; i++) {
-				if(i == 8 || i == 9) {
+			var index = i; 
+			for(var i = 0;i < p.length; i++) { // Loop through all data types to be displayed
+				if(i == 8 || i == 9) { // If data type is melting or boiling
 					if(info[p[i]][settings["unit"]][index] !== null) {
+						// Get prefix ex. Atomic Radius: + actual value + unit
 						changeText(p[i],prefix[i] + info[p[i]][settings["unit"]][index] + " " + settings["unit"]);
-					} else {
-						changeText(p[i],prefix[i] + "Unknown");
+					} else { // If null
+						changeText(p[i],prefix[i] + "Unknown"); // Make unknown
 					}
 				} else {
-					if(info[p[i]][index] != null) {
-						if(i == 6) {
-							changeText(p[i],prefix[i] + states[info[p[i]][index]] + unit[i]);
-						} else if(i == 10) {
+					if(info[p[i]][index] != null) { // If data type value isn't null
+						if(i == 6) { // If data type is phase/state
+							// Get prefix + value reference ex. 'g' -> 'Gas' + unit
+							changeText(p[i],prefix[i] + states[info[p[i]][index]] + unit[i]); 
+						} else if(i == 10) { // If data type is oxidation states
 							var para = get("oxidStat");
+
+							// Remove all childs in oxidation state div
 							while (para.firstChild) {
     							para.removeChild(para.firstChild);
 							}
+
 							var allStates = info[p[i]][index];
 							para.appendChild(document.createTextNode(prefix[i]));
 
-							for(var j = 0;j < allStates.length; j++) {
+							for(var j = 0;j < allStates.length; j++) { // For all states in array
 								oxidStat = allStates[j];
-								if(allStates[j].includes("b")) {
+								if(allStates[j].includes("b")) { // If value has b, put value in <bold> tag
 									oxidStat = allStates[j].substring(1);
 									var bold = document.createElement("b");
 									bold.appendChild(document.createTextNode(oxidStat));
@@ -270,50 +284,60 @@ function tableDesc() {
 									para.appendChild(document.createTextNode(", "));
 								}
 							}
-							para.removeChild(para.lastChild);
-						} else if(i == 11) {
+							para.removeChild(para.lastChild); // Remove last comma
+						} else if(i == 11) { // If data type is electron configuration
 							var para = get("elecConf"); 
+
+							// Remove all childs in electron configuration div
 							while (para.firstChild) {
     							para.removeChild(para.firstChild);
 							}
 
-							var elecConf = info[p[i]][index].split(".");
+							var elecConf = info[p[i]][index].split("."); // Ex. ["1s", "2", "2s", "2"]
 							para.appendChild(document.createTextNode(prefix[i]));
 
 							if(settings["elecConf"] == "abr") {
-								for(var j = 0;j < elecConf.length-1; j+=2) {
-									para.appendChild(document.createTextNode(elecConf[j]));
-									var sup = document.createElement("sup");
-									sup.appendChild(document.createTextNode(elecConf[j+1]));
+								// Add 2 to get to next non superscript and subtract one to prevent undefined
+								for(var j = 0;j < elecConf.length-1; j+=2) { 
+									para.appendChild(document.createTextNode(elecConf[j])); // Append electron level
+									// Append value for level in superscript
+									var sup = document.createElement("sup"); 
+									sup.appendChild(document.createTextNode(elecConf[j+1])); 
 									para.appendChild(sup);
 								}
-							} else if(settings["elecConf"] == "norm"){
-								while(elecConf[0].includes("[")) {
+
+							} else if(settings["elecConf"] == "norm") {
+								while(elecConf[0].includes("[")) { // Ex: [Xe]5s2 
+									// Get ex. [Xe] configuration
 									otherConf = info[p[i]][info["shorthand"].indexOf(elecConf[0].substring(1,3))].split(".");
-									elecConf[0] = elecConf[0].substring(4);
-									for(var j = otherConf.length-1; j >= 0; j--) {
-										elecConf.unshift(otherConf[j]);
+									elecConf[0] = elecConf[0].substring(4); // [Xe]5s2 = 5s2
+									for(var j = otherConf.length-1; j >= 0; j--) { 
+										// Put configuration of abbreviation in front of last configuration
+										elecConf.unshift(otherConf[j]); 
 									}	
 								}
+
+								// Add 2 to get to next non superscript and subtract one to prevent undefined
 								for(var j = 0;j < elecConf.length-1; j+=2) {
-									if(j == 20) {
+									if(j == 20) { // Add new line if on 10th different level 
 										para.appendChild(document.createElement("br"))
 									}
-									para.appendChild(document.createTextNode(elecConf[j]));
+									para.appendChild(document.createTextNode(elecConf[j])); // Append electron level
 									var sup = document.createElement("sup");
+									// Append value for level in superscript
 									sup.appendChild(document.createTextNode(elecConf[j+1]));
 									para.appendChild(sup);
 								}
 							}
-						} else {
-							changeText(p[i],prefix[i] + info[p[i]][index] + unit[i]);
+						} else { // If not special data type 
+							changeText(p[i],prefix[i] + info[p[i]][index] + unit[i]); 
 						}
 						
-					} else {
+					} else { // If null
 						changeText(p[i],prefix[i] + "Unknown");
 					}
 				}
-			}
+			} // Remove all childs in preview, then get new atom div
 			try { get("preview").removeChild(get("preview").firstChild); } catch(err){}
 			get("preview").appendChild(getAtomDOM(index,window.innerHeight/3.8));
 					
@@ -323,9 +347,11 @@ function tableDesc() {
 
 function changeText(dom,text) {
 	var dom = get(dom);
+	// Remove all childs in div
 	while (dom.firstChild) {
     	dom.removeChild(dom.firstChild);
 	}
+
 	dom.appendChild(document.createTextNode(" "));
 	dom.childNodes[0].nodeValue = text;
 }
@@ -345,7 +371,7 @@ function getAtomDOM(atomNum, size) {
 	atom.style.left = "0";
 
 	var circle = document.createElement("div");
-	circle.style.borderRadius = "50%";
+	circle.style.borderRadius = "50%"; // Creates circle
 	circle.style.height = size*0.8;
 	circle.style.width = size*0.8;
 	circle.style.margin = "0 auto";
@@ -370,19 +396,21 @@ function getAtomDOM(atomNum, size) {
 function getColor(theme, atomNum) {
 	if(theme == "category") {
 		var color = colorChart[theme][info[theme][atomNum]];	
-	} else if(theme == "melting" || theme == "boiling") {
-		if(info[theme]["K"][atomNum] == null) {
+	} else if(theme == "melting" || theme == "boiling") { 
+		if(info[theme]["K"][atomNum] == null) { // if value is null
 			color = "#41484D";
 		} else {
+			// Value - Min(all values) / Max(all values) - Min(all values)
 			var ratio = (info[theme]["K"][atomNum] - Math.min.apply(null,info[theme]["K"])) / (Math.max.apply(null,info[theme]["K"]) - Math.min.apply(null,info[theme]["K"]));
-			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio);
+			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); // high, low, ratio
 		}	
 	} else {
-		if(info[theme][atomNum] == null) {
+		if(info[theme][atomNum] == null) { // if value is null
 			color = "#41484D";
 		} else {
+			// Value - Min(all values) / Max(all values) - Min(all values)
 			var ratio = (info[theme][atomNum] - Math.min.apply(null,info[theme])) / (Math.max.apply(null,info[theme]) - Math.min.apply(null,info[theme]));
-			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio);
+			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); 
 		}
 	}
 
@@ -404,45 +432,50 @@ function open(dom) {
 }
 
 function makeSettings() {
-	for(var i = 0; i<options.length;i++) {
-		var parent = get("option")[i];
+	for(var i = 0; i < options.length;i++) {
+		var parent = get("option")[i]; 
 		var text = document.createElement("p");
+		// Create text of current settings choice for this option 
 		text.appendChild(document.createTextNode(choicesDisplay[i][choices[i].indexOf(settings[parent.id])]))
 		parent.appendChild(text);
-		var holder = document.createElement("div");
+		var holder = document.createElement("div"); //Dropdown choice holder div
 		holder.className = "dropdown";
 
 		parent.appendChild(holder);
 		parent.onclick = function() {
+			// Make visible
 			this.childNodes[1].style.opacity = "1";
 			this.childNodes[1].style.display = "flex";
 		}
 		parent.onmouseleave = function() {
+			// Make invisible
 			this.childNodes[1].style.opacity = "0";
 			this.childNodes[1].display = "none";
 		}
 		holder.onmouseleave = function() {
+			// Make invisible
 			this.style.opacity = "0";
 			this.style.display = "none";
 		}
-		for(var j = 0;j < choices[i].length;j++) {
+		for(var j = 0;j < choices[i].length;j++) { // For all choices, append div for choice selection
 			var p = document.createElement("p");
-			p.className = i.toString() + j.toString();
+			p.className = i.toString() + j.toString(); 
 			p.appendChild(document.createTextNode(choicesDisplay[i][j]))
 			holder.appendChild(p);
 			p.onclick = function() {
+				// Change choice by changing cookie and text
 				setting = this.parentNode.parentNode.id;
 				this.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue = this.innerHTML;
 				this.parentNode.style.opacity = "0"; // Doesn't work, no idea why. Perhaps you can't change style of parent nodes?
 				deleteCookie(setting);
 				document.cookie = setting+"="+choices[parseInt(this.className[0])][parseInt(this.className[1])];
-				update();
+				update(); 
 			}
 		}
 	}
 }
 
-if(document.cookie == "") {
+if(document.cookie == "") { // Set defaults if no cookie
 	document.cookie = "theme=light";
 	document.cookie = "tbTheme=category;";
 	document.cookie = "atomTheme=category;";
