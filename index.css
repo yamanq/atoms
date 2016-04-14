@@ -179,7 +179,12 @@ img {
 	color: #FF746B;
 }
 
+.legend {
+	border: 1px solid;
+}
+
 .normal {
+	border: 1px hidden;
 	margin: 3%;
 }
 .extension {

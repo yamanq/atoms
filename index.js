@@ -122,6 +122,16 @@ function deleteCookie(setting) {
 	document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
 }
 
+function createLegend() {
+	// Create Table element
+	var tbl = document.createElement('table');
+	
+	// Adds Class for styling
+	tbl.className = "legend";
+
+	// Creates 
+}
+
 function createTable() {
     var tbl = document.createElement('table');
     tbl.style.border = "1px hidden";
