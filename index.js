@@ -138,6 +138,12 @@ function createGradientLegend() {
 
 	// Gets theme then makes vars for hexes so that repeated table access not necessary
 	var theme = settings["displayTheme"];
+
+	//Filter out non-gradient layouts
+	if (colorChart[theme].length > 2) {
+		//keyLegend();
+	}
+
 	var color1 = colorChart[theme][0];
 	var color2 = colorChart[theme][1];
 
