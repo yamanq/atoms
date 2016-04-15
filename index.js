@@ -82,13 +82,20 @@ function gradientColor(hex1, hex2, ratio) {
 	}
 
 	// Creates end table for finished hex parts
-	donetable = [];
+	var donetable = [];
 	// Averages each of the three parts between hex1 and hex2
 	for (var i = 0; i <= 2; i++) {
 		// Weighted average to get exact gradient necessary and not average
 		// Round to prevent weird hex decimal shenanigans
-		val = Math.round((ratio) * hex1[i] + (1 - ratio) * hex2[i]);
-		donetable[i] = val.toString(16);
+		var val = Math.round((ratio) * hex1[i] + (1 - ratio) * hex2[i]);
+		val = val.toString(16);
+
+		// Adds 0 to solve math automatically removing preciding 0s
+		if (val.length === 1) {
+			val = "0" + val;
+		}
+
+		donetable[i] = val;
 	}
 
 	// Rejoins hex and adds #
@@ -129,14 +136,14 @@ function createGradientLegend() {
 	// Adds Class for styling
 	tbl.className = "legend";
 
-	// Creates a gradient of 100 values wide (j) for good transition
-	// Table is also 30 tall (i) for easy viewing
-	for(var i = 0; i < 1; i++) {
-        var tr = tbl.insertRow();
-        for(var j = 0; j < 50; j++) {
-            var td = tr.insertCell();
-        }
+	// Creates a gradient of 101 values wide (j) for good transition
+    var tr = tbl.insertRow();
+    for(var j = 0; j <= 1; j += 0.01) {
+        var td = tr.insertCell();
+        td.className = "legendcell";
+        td.style.backgroundColor = gradientColor("#000000", "#ffffff", j);
     }
+
 
     // Adds table to sidebar
     get("sidebar")[0].appendChild(tbl);
@@ -518,7 +525,7 @@ getJSON();
 
 setTimeout(function mainFunc() {
 	createTable();
-	// createGradientLegend();
+	createGradientLegend();
 	update();
 	makeSettings();
 	tableDesc();
