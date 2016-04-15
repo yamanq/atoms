@@ -154,6 +154,7 @@ function createGradientLegend() {
     for(var j = 0; j <= 1; j += 0.01) {
         var td = tr.insertCell();
         td.className = "legendcell";
+        td.id
         td.style.backgroundColor = gradientColor(color1, color2 , j);
     }
 
@@ -162,8 +163,15 @@ function createGradientLegend() {
     get("keyholder").appendChild(tbl);
 }
 
-function legendChange (theme) {
-	// TODO
+function legendChange(theme) {
+	var color1 = colorChart[theme][0];
+	var color2 = colorChart[theme][1];
+	for(var j = 0; j <= 99; j ++) {
+		if (document.getElementsByClassName("legend").length != 0) {
+			document.getElementsByClassName("legendcell")[j].style.backgroundColor = gradientColor(color1, color2 , j/100);
+		}
+		
+    }
 }
 
 function createTable() {
@@ -176,6 +184,7 @@ function createTable() {
         var tr = tbl.insertRow();
         for(var j = 0; j < 18; j++) {
             td = tr.insertCell();
+            td.className = "periodictable";
         }
     }
    	get("sidebar")[0].appendChild(tbl);
@@ -187,6 +196,7 @@ function createTable() {
         var tr = tbl.insertRow();
         for(var j = 0; j < 15; j++) {
             var td = tr.insertCell();
+            td.className = "periodictable";
         }
     }
    	get("sidebar")[0].appendChild(tbl);
@@ -200,7 +210,7 @@ function createTable() {
     	cells[info["location"][i]].appendChild(ele);
     	text = document.createTextNode(info["shorthand"][i]);
     	cells[info["location"][i]].appendChild(text);
-    	cells[info["location"][i]].className = "atom"; // Adds class to prevent hover animation on blank cells
+    	cells[info["location"][i]].className = cells[info["location"][i]].className +" atom"; // Adds class to prevent hover animation on blank cells
     }
 
 }
@@ -244,7 +254,9 @@ function changeTheme(type) {
 function tableTheme(theme) {
 	for(var i = 0;i < 118;i++) {
 		// Changes background color of each cell
-		get("td")[info["location"][i]].style.backgroundColor = getColor(theme, i);
+		if (document.getElementsByClassName("periodictable").length != 0) {
+			document.getElementsByClassName("periodictable")[info["location"][i]].style.backgroundColor = getColor(theme, i);
+		}
 	}
 }
 
