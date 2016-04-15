@@ -69,6 +69,10 @@ img {
 	font-size: 150%;
 }
 
+/*p[title] {
+	background-color: red;
+}*/
+
 .option {
 	position: relative;
 	display: inline-block;
