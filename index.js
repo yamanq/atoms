@@ -23,11 +23,11 @@ var colorChart = {
 	"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439",
 				 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"},
 	"atomRadi": ["#151618", "#2C7BF2"],
-	"moleWeig": ["#151618","#2C7BF2"],
-	"ioniEner":["#E2DC27","#5535D4"],
-	"elecAffi": ["#E2DC27","#5535D4"],
+	"moleWeig": ["#151618", "#2C7BF2"],
+	"ioniEner":["#E2DC27", "#5535D4"],
+	"elecAffi": ["#E2DC27", "#5535D4"],
 	"elecNega": ["#E2DC27","#5535D4"],
-	"density": ["#151618","#2C7BF2"],
+	"density": ["#151618", "#2C7BF2"],
 	"melting": ["#D7301E", "#69F2F2"],
 	"boiling": ["#D7301E", "#69F2F2"]		
 };
@@ -136,12 +136,18 @@ function createGradientLegend() {
 	// Adds Class for styling
 	tbl.className = "legend";
 
+	// Gets theme then makes vars for hexes so that repeated table access not necessary
+	var theme = settings["displayTheme"];
+	var color1 = colorChart[theme][0];
+	var color2 = colorChart[theme][1];
+
+
 	// Creates a gradient of 101 values wide (j) for good transition
     var tr = tbl.insertRow();
     for(var j = 0; j <= 1; j += 0.01) {
         var td = tr.insertCell();
         td.className = "legendcell";
-        td.style.backgroundColor = gradientColor("#000000", "#ffffff", j);
+        td.style.backgroundColor = gradientColor(color1, color2 , j);
     }
 
 
