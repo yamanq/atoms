@@ -68,7 +68,7 @@ function changeColor(hex, amt) {
 function gradientColor(hex1, hex2, ratio) {
 
 	// Splits hex1 into 3 pieces (2 char each)
-	hex1 = hex1.replace("#", "").match(/.{1,2}/g);
+	var hex1 = hex1.replace("#", "").match(/.{1,2}/g);
 	// Converts each one into int
 
 	for (var i = 0; i <= 2; i++) {
@@ -76,7 +76,7 @@ function gradientColor(hex1, hex2, ratio) {
 	}
 
 	// Does above process for hex2
-	hex2 = hex2.replace("#", "").match(/.{1,2}/g);
+	var hex2 = hex2.replace("#", "").match(/.{1,2}/g);
 	for (var i = 0; i <= 2; i++) {
 		hex2[i] = parseInt(hex2[i], 16);
 	}
@@ -139,9 +139,10 @@ function createGradientLegend() {
 	// Gets theme then makes vars for hexes so that repeated table access not necessary
 	var theme = settings["displayTheme"];
 
-	//Filter out non-gradient layouts
+	// Filter out non-gradient layouts
 	if (colorChart[theme].length > 2) {
 		//keyLegend();
+		return;
 	}
 
 	var color1 = colorChart[theme][0];
@@ -157,8 +158,12 @@ function createGradientLegend() {
     }
 
 
-    // Adds table to sidebar
-    get("sidebar")[0].appendChild(tbl);
+    // Adds table to key area
+    get("keyholder").appendChild(tbl);
+}
+
+function legendChange (theme) {
+	// TODO
 }
 
 function createTable() {
@@ -170,7 +175,7 @@ function createTable() {
     for(var i = 0; i < 7; i++) {
         var tr = tbl.insertRow();
         for(var j = 0; j < 18; j++) {
-            var td = tr.insertCell();
+            td = tr.insertCell();
         }
     }
    	get("sidebar")[0].appendChild(tbl);
@@ -214,8 +219,10 @@ function update() {
 }
 
 function applyChanges() {
+	var theme = settings["displayTheme"];
 	changeTheme(settings["theme"]);
-	tableTheme(settings["displayTheme"]);
+	tableTheme(theme);
+	legendChange(theme);
 }
 
 function changeTheme(type) {
@@ -537,8 +544,8 @@ getJSON();
 
 setTimeout(function mainFunc() {
 	createTable();
-	createGradientLegend();
 	update();
 	makeSettings();
 	tableDesc();
+	createGradientLegend();
 }, 600)	

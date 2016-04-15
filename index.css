@@ -69,6 +69,10 @@ img {
 	font-size: 150%;
 }
 
+/*p[title] {
+	background-color: red;
+}*/
+
 .option {
 	position: relative;
 	display: inline-block;
@@ -177,6 +181,12 @@ img {
 
 .fa:hover {
 	color: #FF746B;
+}
+
+.keyholder {
+	margin-bottom: -17%;
+	margin-top: 17%;
+	margin-left: 31%;
 }
 
 .legend {
