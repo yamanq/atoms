@@ -161,10 +161,10 @@ if(document.cookie == "") { // Set defaults if no cookie
 getJSON();
 
 setTimeout(function mainFunc() {
+	getRanges();
 	createTable();
 	update();
 	makeSettings();
 	tableDesc();
-	getRanges();
 	createGradientLegend();
 }, 600);	

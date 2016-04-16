@@ -146,7 +146,9 @@ function tableDesc() {
 					}
 				}
 			} // Remove all childs in preview, then get new atom div
-			try { get("preview").removeChild(get("preview").firstChild); } catch(err){}
+			try { 
+				get("preview").removeChild(get("preview").firstChild); 
+			} catch(err){}
 			get("preview").appendChild(getAtomDOM(index,window.innerHeight/3.8));
 					
 		}
@@ -189,8 +191,9 @@ function getAtomDOM(atomNum, size) {
 	
 	var bgColor = getColor(settings["displayTheme"],atomNum);
 	circle.style.backgroundColor = bgColor;
+	console.log("hi");
 	circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20);
-
+	console.log("inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20))
 	var sh = document.createElement("p");
 	sh.appendChild(document.createTextNode(info["shorthand"][atomNum]));
 	sh.className = "sh";
@@ -211,7 +214,7 @@ function getColor(theme, atomNum) {
 			color = "#41484D";
 		} else {
 			// Value - Min(all values) / Max(all values) - Min(all values)
-			var ratio = (info[theme]["K"][atomNum] - ranges[theme][0]) / ranges[theme][3];
+			var ratio = (info[theme]["K"][atomNum] - ranges[theme]["K"][0]) / ranges[theme]["K"][2];
 			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); // high, low, ratio
 		}	
 	} else {
@@ -219,7 +222,7 @@ function getColor(theme, atomNum) {
 			color = "#41484D";
 		} else {
 			// Value - Min(all values) / Max(all values) - Min(all values)
-			var ratio = (info[theme][atomNum] - ranges[theme][0]) / ranges[theme][3];
+			var ratio = (info[theme][atomNum] - ranges[theme][0]) / ranges[theme][2];
 			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); 
 		}
 	}

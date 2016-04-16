@@ -16,8 +16,12 @@ function changeColor(hex, amt) {
  
     if (g > 255) g = 255;
     else if (g < 0) g = 0;
- 
-    return "#" + (g | (b << 8) | (r << 16)).toString(16);
+ 	
+ 	var final = (g | (b << 8) | (r << 16)).toString(16);
+
+ 	// Adds preceeding zeros
+ 	while (final.length < 6) {final = "0" + final};
+    return "#" + final;
 }
 
 function gradientColor(hex1, hex2, ratio) {
@@ -45,11 +49,10 @@ function gradientColor(hex1, hex2, ratio) {
 		var val = Math.round((ratio) * hex1[i] + (1 - ratio) * hex2[i]);
 		val = val.toString(16);
 
-		// Adds 0 to solve math automatically removing preciding 0s
+		// Adds 0 to solve math automatically removing preceeding zeroes
 		if (val.length === 1) {
 			val = "0" + val;
 		}
-
 		donetable[i] = val;
 	}
 
