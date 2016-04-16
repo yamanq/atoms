@@ -66,6 +66,15 @@ function createTable() {
     }
 }
 
+/* function keyLegend(theme) {
+ 	// Create Table
+ 	var tbl = document.createElement('table');
+ 	// Class for CSS
+ 	tbl.className = "key";
+ 	// Get theme
+ 	var theme = settings["displayTheme"]; 
+}*/
+
 function createGradientLegend() {
 	// Create Table element
 	var tbl = document.createElement('table');
@@ -78,20 +87,18 @@ function createGradientLegend() {
 
 	// Filter out non-gradient layouts
 	if (colorChart[theme].length > 2) {
-		//keyLegend();
+		//keyLegend(theme);
 		return;
 	}
 
 	var color1 = colorChart[theme][0];
 	var color2 = colorChart[theme][1];
 
-
 	// Creates a gradient of 101 values wide (j) for good transition
     var tr = tbl.insertRow();
     for(var j = 0; j <= 1; j += 0.01) {
         var td = tr.insertCell();
         td.className = "legendcell";
-        td.id
         td.style.backgroundColor = gradientColor(color1, color2 , j);
     }
 
