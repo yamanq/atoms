@@ -187,7 +187,9 @@ function getAtomDOM(atomNum, size) {
 	circle.style.top = size*0.1;
 	circle.style.left = size*0.1;
 	
-	circle.style.backgroundColor = getColor(settings["displayTheme"],atomNum);
+	var bgColor = getColor(settings["displayTheme"],atomNum);
+	circle.style.backgroundColor = bgColor;
+	circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20);
 
 	var sh = document.createElement("p");
 	sh.appendChild(document.createTextNode(info["shorthand"][atomNum]));
