@@ -35,7 +35,7 @@ function tableDesc() {
 	get("infoBox").appendChild(box);
 
 	// Creates 'reactivity' for each cell
-	for(var i = 0;i < 118;i++) {
+	for(var i = 0;i < elementCount;i++) {
 		var cell = get("td")[info["location"][i]]; // Gets location of each atom in order
 
 		cell.onclick = function() {
@@ -211,7 +211,7 @@ function getColor(theme, atomNum) {
 			color = "#41484D";
 		} else {
 			// Value - Min(all values) / Max(all values) - Min(all values)
-			var ratio = (info[theme]["K"][atomNum] - Math.min.apply(null,info[theme]["K"])) / (Math.max.apply(null,info[theme]["K"]) - Math.min.apply(null,info[theme]["K"]));
+			var ratio = (info[theme]["K"][atomNum] - ranges[theme][0]) / ranges[theme][3];
 			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); // high, low, ratio
 		}	
 	} else {
@@ -219,7 +219,7 @@ function getColor(theme, atomNum) {
 			color = "#41484D";
 		} else {
 			// Value - Min(all values) / Max(all values) - Min(all values)
-			var ratio = (info[theme][atomNum] - Math.min.apply(null,info[theme])) / (Math.max.apply(null,info[theme]) - Math.min.apply(null,info[theme]));
+			var ratio = (info[theme][atomNum] - ranges[theme][0]) / ranges[theme][3];
 			var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); 
 		}
 	}

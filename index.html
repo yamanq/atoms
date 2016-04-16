@@ -34,10 +34,12 @@
 		var settings = {};
 		var info;
 		var options = ["theme","displayTheme","elecConf","unit"];
+		var ranges = {};
+		var elementCount = 118;
 
 		var choices = [
 			["light","dark"],
-			["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
+			["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting", "boiling"],
 			["abr","norm"],
 			["K","C","F"]
 		];
@@ -60,6 +62,11 @@
 			"melting": ["#D7301E", "#69F2F2"],
 			"boiling": ["#D7301E", "#69F2F2"]		
 		};
+
+		var themeChart = {
+		"pulltab": {'light': '#B3DAFF','dark': '#F33333'},
+		"sidebar": {'light':'#E6F5FF','dark':'#FF5858'} 
+	};
 	</script>
 
 	<script src="./js/main.js"></script>

@@ -55,7 +55,7 @@ function createTable() {
 
    	// Creates text for the periodic table
     cells = get("td");
-    for(var i = 0;i < 118;i++) {
+    for(var i = 0;i < elementCount;i++) {
     	ele = document.createElement("p");
     	text = document.createTextNode(i+1); // i+1 to offset 0
     	ele.appendChild(text);
@@ -106,6 +106,28 @@ function createGradientLegend() {
     get("legendholder").appendChild(tbl);
 }
 
+function getRanges() {
+	// Format of ranges is [Min, Max, Range]
+	for(var i = 1; i < choices[1].length; i++) { // Possible data types are options except for category
+		var option = choices[1][i]; 
+		if(i == 7 || i == 8) {
+			ranges[option] = {};
+			for(var j = 0; j < 3; j++) { // Units for temperatures
+				var unit = choices[3][j];
+				var min = Math.min.apply(null,info[option][unit]);
+				var max = Math.max.apply(null,info[option][unit]);
+				var range = max - min;
+				ranges[option][unit] = [min,max,range];
+			}		
+		} else {
+			var min = Math.min.apply(null,info[option]);
+			var max = Math.max.apply(null,info[option]);
+			var range = max - min;
+			ranges[option] = [min,max,range];
+		}			
+	}
+}
+
 function get(name) {
 	// Condensed format for document.getX
 	var elements = [];
@@ -143,5 +165,6 @@ setTimeout(function mainFunc() {
 	update();
 	makeSettings();
 	tableDesc();
+	getRanges();
 	createGradientLegend();
 }, 600);	

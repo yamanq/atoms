@@ -1,21 +1,16 @@
 function changeTheme(type) {
-	var theme = {
-		"pulltab": {'light': '#B3DAFF','dark': '#F33333'},
-		"sidebar": {'light':'#E6F5FF','dark':'#FF5858'} 
-	};
-
 	// Changes background image
 	get("body").style.backgroundImage = "url('./resources/static/" + type +".png')";
 
 	// Changes interface element colors
 	for(var i = 0; i < get("pulltab").length; i++) {
-		get("pulltab")[i].style.backgroundColor = theme["pulltab"][type];
-		get("sidebar")[i].style.backgroundColor = theme["sidebar"][type];
+		get("pulltab")[i].style.backgroundColor = themeChart["pulltab"][type];
+		get("sidebar")[i].style.backgroundColor = themeChart["sidebar"][type];
 	}
 }
 
 function tableTheme(theme) {
-	for(var i = 0;i < 118;i++) {
+	for(var i = 0;i < elementCount;i++) {
 		// Changes background color of each cell
 		if (document.getElementsByClassName("periodictable").length != 0) {
 			document.getElementsByClassName("periodictable")[info["location"][i]].style.backgroundColor = getColor(theme, i);
