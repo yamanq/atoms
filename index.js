@@ -129,6 +129,16 @@ function deleteCookie(setting) {
 	document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
 }
 
+// function keyLegend(theme) {
+// 	// Create Table
+// 	var tbl = document.createElement('table');
+// 	// Class for CSS
+// 	tbl.className = "key";
+// 	// Get theme
+// 	var theme = settings["displayTheme"];
+
+// }
+
 function createGradientLegend() {
 	// Create Table element
 	var tbl = document.createElement('table');
@@ -141,7 +151,7 @@ function createGradientLegend() {
 
 	// Filter out non-gradient layouts
 	if (colorChart[theme].length > 2) {
-		//keyLegend();
+		keyLegend(theme);
 		return;
 	}
 
@@ -154,13 +164,13 @@ function createGradientLegend() {
     for(var j = 0; j <= 1; j += 0.01) {
         var td = tr.insertCell();
         td.className = "legendcell";
-        td.id
         td.style.backgroundColor = gradientColor(color1, color2 , j);
+
     }
 
 
     // Adds table to key area
-    get("keyholder").appendChild(tbl);
+    get("legendholder").appendChild(tbl);
 }
 
 function legendChange(theme) {
