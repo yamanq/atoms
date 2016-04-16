@@ -12,7 +12,7 @@
 		<div class="pulltab first"><p class="tDesc">Elements</p></div>
 		<div class="sidebar elements">
 			<i class="fa fa-close"></i>
-			<div class="keyholder"></div>
+			<div class="legendholder"></div>
 		</div>
 
 		<div class="pulltab second"><p class="tDesc">Settings</p></div>
@@ -30,7 +30,42 @@
 		
 		<div class="workspace"></div>
 	</body>
-	<script src="./index.js"></script>
+	<script type='text/javascript' > 
+		var settings = {};
+		var info;
+		var options = ["theme","displayTheme","elecConf","unit"];
+
+		var choices = [
+			["light","dark"],
+			["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting","boiling"],
+			["abr","norm"],
+			["K","C","F"]
+		];
+		var choicesDisplay = [
+			["Light","Dark"],
+			["Region", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
+			["Abbreviated","Full"],
+			["Kelvin","Celsius","Fahrenheit"]
+		];
+
+		var colorChart = {
+			"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439",
+						 "bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"},
+			"atomRadi": ["#151618", "#2C7BF2"],
+			"moleWeig": ["#151618", "#2C7BF2"],
+			"ioniEner":["#E2DC27", "#5535D4"],
+			"elecAffi": ["#E2DC27", "#5535D4"],
+			"elecNega": ["#E2DC27","#5535D4"],
+			"density": ["#151618", "#2C7BF2"],
+			"melting": ["#D7301E", "#69F2F2"],
+			"boiling": ["#D7301E", "#69F2F2"]		
+		};
+	</script>
+	<script src="./js/main.js"></script>
+	<script src="./js/backend.js"></script>
+	<script src="./js/buttons.js"></script>
+	<script src="./js/reactive.js"></script>
+	<script src="./js/settings.js"></script>
 	<!--<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.1/jquery.scrollTo.js"></script>
 	-->
