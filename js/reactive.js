@@ -268,7 +268,7 @@ function makeSettings() {
 			p.appendChild(document.createTextNode(choicesDisplay[i][j]))
 			holder.appendChild(p);
 
-			p.onclick = function() {
+			p.onclick = function(event) {
 				event.stopPropagation(); // Parent onclick doesn't occur when child gets clicked
 				var value = this.innerHTML;
 				var k = this;
