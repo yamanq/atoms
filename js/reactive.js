@@ -49,6 +49,7 @@ function tableDesc() {
 		var cell = get("td")[info["location"][i]]; // Gets location of each atom in order
 
 		cell.onclick = function() {
+			lastElement = this;
 			var index = parseInt(this.childNodes[0].childNodes[0].nodeValue-1); 
 			for(var i = 0;i < p.length; i++) { // Loop through all data types to be displayed
 				if(i == 8 || i == 9) { // If data type is melting or boiling

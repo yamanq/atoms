@@ -24,6 +24,7 @@ function tableTheme(theme) {
 			document.getElementsByClassName("periodictable")[info["location"][i]].style.backgroundColor = getColor(theme, i);
 		}
 	}
+	try {lastElement.click();} catch(err){}
 }
 
 function legendChange(theme) {
