@@ -1,5 +1,29 @@
 @import url(https://fonts.googleapis.com/css?family=Oswald);
 
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 12px;
+    margin-ri
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.7); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0,0,0,0.4); 
+}
+
 html {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -10,7 +34,7 @@ html {
 
 body {
 	background-image: url("./resources/static/light.png");
-	overflow-x: hidden;
+	overflow: hidden;
 	font-family: Oswald;
 	font-size: 100%;
 	margin: 0;
@@ -75,6 +99,7 @@ img {
 	display: inline-block;
 	margin-right: 3%;
 	margin-top: 0;
+	height:10%;
 }
 
 .setting {
@@ -181,6 +206,8 @@ img {
 	padding: 15px 20px 15px 15px;
 	box-shadow: 2px 2px 5px 3px #333;
 	z-index:5;
+	overflow-x: hidden;
+	overflow-y: auto;
 
 	-webkit-transition: margin 0.5s ease, background-color 0.5s ease;  
 	-moz-transition: margin 0.5s ease, background-color 0.5s ease; 
@@ -190,6 +217,8 @@ img {
 
 .elements {
 	margin-left: -150%;
+	height:100%;
+	padding-right: 10px;
 }
 
 .settings {
