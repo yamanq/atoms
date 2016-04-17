@@ -287,7 +287,7 @@ img {
 	position:absolute;
 	display: none;
 	opacity: 0;
-	margin-top: 8%;
+	margin-top: 65%;
 	margin-left: -9%;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
@@ -307,7 +307,7 @@ img {
 	display: none;
 	opacity: 0;
 	border-radius: 7px;
-	margin-top: 11%;
+	margin-top: 95%;
 	margin-left: -13%;
 	padding: 5px;
 	font-size: 90%;
