@@ -228,6 +228,21 @@ img {
 	height: 25px !important;
 }
 
+.legendrangeval {
+	display: flex;
+}
+
+.maxlegend {
+	margin-top: -4.5%;
+	margin-left: 26.5%;
+}
+
+.minlegend {
+	margin-left: -2%;
+	margin-top: 1%;
+}
+
+
 .normal {
 	border: 1px hidden;
 	margin: 3%;
