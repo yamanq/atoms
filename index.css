@@ -310,6 +310,7 @@ img {
 	font-size: 90%;
 	background-color: #fefefe;
 	box-shadow: 4px 4px 3px #444;
+	z-index:60;
 
 	-webkit-transition: opacity 0.3s ease;  
 	-moz-transition: opacity 0.3s ease; 
