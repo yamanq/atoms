@@ -191,9 +191,7 @@ function getAtomDOM(atomNum, size) {
 	
 	var bgColor = getColor(settings["displayTheme"],atomNum);
 	circle.style.backgroundColor = bgColor;
-	console.log("hi");
 	circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20);
-	console.log("inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20))
 	var sh = document.createElement("p");
 	sh.appendChild(document.createTextNode(info["shorthand"][atomNum]));
 	sh.className = "sh";
@@ -236,39 +234,62 @@ function makeSettings() {
 		var text = document.createElement("p");
 		// Create text of current settings choice for this option 
 		text.appendChild(document.createTextNode(choicesDisplay[i][choices[i].indexOf(settings[parent.id])]))
+		text.className = "selection";
+
 		parent.appendChild(text);
 		var holder = document.createElement("div"); //Dropdown choice holder div
 		holder.className = "dropdown";
-
 		parent.appendChild(holder);
+
+		// On mouse functions
 		parent.onclick = function() {
 			// Make visible
-			this.childNodes[1].style.opacity = "1";
-			this.childNodes[1].style.display = "flex";
+			var k = this;
+			this.childNodes[1].style.display = "inline";
+			// Needs delay in between to execute transition properly, do not remove. 
+			setTimeout(function(){k.childNodes[1].style.opacity = "1";},1);
 		}
 		parent.onmouseleave = function() {
 			// Make invisible
+			var k = this;
 			this.childNodes[1].style.opacity = "0";
-			this.childNodes[1].display = "none";
+			setTimeout(function(){k.childNodes[1].display = "none";},300); //Time for opacity change
 		}
 		holder.onmouseleave = function() {
 			// Make invisible
+			var k = this;
 			this.style.opacity = "0";
-			this.style.display = "none";
+			setTimeout(function(){k.style.display = "none";},300); //Time for opacity change
 		}
+
 		for(var j = 0;j < choices[i].length;j++) { // For all choices, append div for choice selection
 			var p = document.createElement("p");
 			p.className = i.toString() + j.toString(); 
 			p.appendChild(document.createTextNode(choicesDisplay[i][j]))
 			holder.appendChild(p);
+
 			p.onclick = function() {
-				// Change choice by changing cookie and text
-				setting = this.parentNode.parentNode.id;
-				this.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue = this.innerHTML;
-				this.parentNode.style.opacity = "0"; // Doesn't work, no idea why. Perhaps you can't change style of parent nodes?
-				deleteCookie(setting);
-				document.cookie = setting+"="+choices[parseInt(this.className[0])][parseInt(this.className[1])];
-				update(); 
+				event.stopPropagation(); // Parent onclick doesn't occur when child gets clicked
+				var value = this.innerHTML;
+				var k = this;
+				var setting = this.parentNode.parentNode.id;
+				var textDiv = this.parentNode.parentNode.childNodes[0].childNodes[0];
+				// Only if different value
+				if(value !== textDiv.nodeValue) {
+					this.parentNode.style.opacity = "0";
+					setTimeout(function(){k.parentNode.style.display = "none";},300);
+					// Text transition: opacity 0
+					textDiv.parentNode.style.color = "rgba(0,0,0,0)";
+					// Update settings through cookie
+					deleteCookie(setting);
+					document.cookie = setting+"="+choices[parseInt(this.className[0])][parseInt(this.className[1])];
+					update(); 
+					// Text transition: opacity 1
+					setTimeout(function() {
+						textDiv.nodeValue = value;
+						textDiv.parentNode.style.color = "rgba(0,0,0,1)";
+					}, 650)
+				}
 			}
 		}
 	}
