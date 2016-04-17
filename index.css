@@ -107,13 +107,15 @@ img {
 	position: relative;
 	height:100%;
 	width:100%;
-	margin: 5%;
+	margin-left: 4%;
+	margin-bottom: 10%;
 }
 
 .option {
 	position: relative;
 	display: inline-block;
 	font-size: 130%;
+	margin-top : -2%;
 }
 
 .selection {
@@ -343,8 +345,8 @@ img {
 	position:absolute;
 	display: none;
 	opacity: 0;
-	top: 61%;
-	margin-left: -9%;
+	top: 70%;
+	margin-left: -8%;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: 17px solid #fefefe;
@@ -364,7 +366,7 @@ img {
 	opacity: 0;
 	border-radius: 7px;
 	top: 102%;
-	margin-left: -13%;
+	margin-left: -12%;
 	padding: 5px;
 	font-size: 90%;
 	color: #000;
