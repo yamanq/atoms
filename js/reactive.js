@@ -289,7 +289,7 @@ function makeSettings() {
 					this.parentNode.style.opacity = "0";
 					setTimeout(function(){k.parentNode.style.display = "none";},300);
 					// Text transition: opacity 0
-					textDiv.parentNode.style.color = "rgba(0,0,0,0)";
+					textDiv.parentNode.style.color = themeChart["font"][settings["theme"]].replace(")",",0)").replace("b","ba");
 					// Update settings through cookie
 					deleteCookie(setting);
 					document.cookie = setting+"="+choices[parseInt(this.className[0])][parseInt(this.className[1])];
@@ -297,7 +297,7 @@ function makeSettings() {
 					// Text transition: opacity 1
 					setTimeout(function() {
 						textDiv.nodeValue = value;
-						textDiv.parentNode.style.color = "rgba(0,0,0,1)";
+						textDiv.parentNode.style.color = themeChart["font"][settings["theme"]].replace(")",",1)").replace("b","ba");
 					}, 650)
 				}
 			}

@@ -38,6 +38,9 @@ td {
 	transition: box-shadow 0.3s ease;
 
 }
+.periodictable {
+	color: #000;
+}
 
 .atom:hover {
 	box-shadow:inset 0 0 0 99999px rgba(0,0,0,0.2);
@@ -150,7 +153,6 @@ img {
 	width: 6.2%;
 	height: 4%;
 	background-color: #b3daff;
-	color: rgba(0,0,0,0);
 	box-shadow: 2px 2px 5px 3px #333;
 	cursor: pointer;
 
@@ -162,7 +164,6 @@ img {
 
 .pulltab:hover {
 	margin-left: 0%;
-	color: rgba(0,0,0,1)
 }
 
 .first {
@@ -337,6 +338,7 @@ img {
 	margin-left: -13%;
 	padding: 5px;
 	font-size: 90%;
+	color: #000;
 	background-color: #fefefe;
 	box-shadow: 4px 4px 3px #444;
 	z-index:60;
