@@ -34,6 +34,16 @@ function tableDesc() {
 	box.className = "preview";
 	get("infoBox").appendChild(box);
 
+	var trans1 = get("periodictable")[92];
+	var trans2 = get("periodictable")[110];
+
+	trans1.style.backgroundColor = "#41484D";
+	trans2.style.backgroundColor = "#41484D";
+	trans1.appendChild(document.createTextNode("57 - 71"));
+	trans2.appendChild(document.createTextNode("89 - 103"));
+	trans1.style.fontSize = "90%";
+	trans2.style.fontSize = "90%";
+
 	// Creates 'reactivity' for each cell
 	for(var i = 0;i < elementCount;i++) {
 		var cell = get("td")[info["location"][i]]; // Gets location of each atom in order
