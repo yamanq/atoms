@@ -54,27 +54,27 @@
 		<div class="workspace"></div>
 	</body>
 	<script type='text/javascript'> 
-		var settings = {};
-		var info;
-		var options = ["theme","displayTheme","elecConf","unit"];
-		var ranges = {};
-		var elementCount = 118;
+		var settings = {}; //settings[theme] will return the current setting
+		var info; // JSON file
+		var options = ["theme","displayTheme","elecConf","unit"]; 
+		var ranges = {}; //ranges[theme][0] is min [1] is max [2] is range
+		var elementCount = 118; // Number of elements
 
-		var choices = [
+		var choices = [ //Keep these in the same order as options
 			["light","dark"],
 			["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting", "boiling"],
 			["abr","norm"],
 			["K","C","F"]
 		];
 
-		var choicesDisplay = [
+		var choicesDisplay = [ // Keep these in the same order as options
 			["Light","Dark"],
 			["Region", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
 			["Abbreviated","Full"],
 			["Kelvin","Celsius","Fahrenheit"]
 		];
 
-		var colorChart = {
+		var colorChart = { //colorChart[theme][0] = most [1] = least
 			"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439","bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"},
 			"atomRadi": ["#151618", "#2C7BF2"],
 			"moleWeig": ["#151618", "#2C7BF2"],
@@ -86,7 +86,7 @@
 			"boiling": ["#D7301E", "#69F2F2"]		
 		};
 
-		var themeChart = {
+		var themeChart = { //themeChart[element][theme]
 		"pulltab": {'light': '#B3DAFF','dark': '#F33333'},
 		"sidebar": {'light':'#E6F5FF','dark':'#FF5858'} 
 		};
@@ -97,7 +97,4 @@
 	<script src="./js/buttons.js"></script>
 	<script src="./js/reactive.js"></script>
 	<script src="./js/settings.js"></script>
-	<!--<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.1/jquery.scrollTo.js"></script>
-	-->
 </html>

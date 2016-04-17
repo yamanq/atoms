@@ -19,9 +19,9 @@ function tableDesc() {
 	div2.className = "info2";
 	get("infoBox").appendChild(div2);
 
-	for(var i = 0;i < p.length; i++) {
+	for(var i = 0;i < p.length; i++) { // For all possible data types
 		elem = document.createElement("p");
-		elem.className = "eDesc " + p[i];
+		elem.className = "eDesc " + p[i]; 
 		if(i <= 5) {
 	 		get("info1").appendChild(elem);
 		} else {
@@ -77,7 +77,7 @@ function tableDesc() {
 									par.appendChild(document.createTextNode(oxidStat));
 									par.className = "oxid common";
 									para.appendChild(par);
-									var par = document.createElement("span");
+									var par = document.createElement("span"); // Spans use inline block
 									par.className = "comma"
 									par.appendChild(document.createTextNode(", "))
 									para.appendChild(par);
@@ -86,7 +86,7 @@ function tableDesc() {
 									pa.appendChild(document.createTextNode(oxidStat));
 									pa.className = "oxid";
 									para.appendChild(pa);
-									pa = document.createElement("span");
+									pa = document.createElement("span"); // Spans use inline block
 									pa.className = "comma"
 									pa.appendChild(document.createTextNode(", "))
 									para.appendChild(pa);
