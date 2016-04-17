@@ -5,6 +5,7 @@ html {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    user-select: none;
 }
 
 body {
@@ -195,7 +196,7 @@ img {
 	width: 20%;
 }
 
-.periodictable {
+.atom {
 	cursor: pointer;
 }
 
@@ -245,6 +246,11 @@ img {
 .infoBox {
 	display: flex;
 	cursor: text;
+	-webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .preview {
@@ -292,7 +298,7 @@ img {
 	position:absolute;
 	display: none;
 	opacity: 0;
-	margin-top: 65%;
+	top: 61%;
 	margin-left: -9%;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
@@ -312,7 +318,7 @@ img {
 	display: none;
 	opacity: 0;
 	border-radius: 7px;
-	margin-top: 95%;
+	top: 102%;
 	margin-left: -13%;
 	padding: 5px;
 	font-size: 90%;
