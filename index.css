@@ -189,10 +189,14 @@ img {
 .elements {
 	margin-left: -150%;
 }
+
 .settings {
 	margin-left: -40%;
 	width: 20%;
+}
 
+.periodictable {
+	cursor: pointer;
 }
 
 .fa {
@@ -240,6 +244,7 @@ img {
 
 .infoBox {
 	display: flex;
+	cursor: text;
 }
 
 .preview {
