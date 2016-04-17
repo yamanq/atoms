@@ -30,7 +30,8 @@ function tableTheme(theme) {
 function legendChange(theme) {
 	// Title
 	if (document.getElementsByClassName("tabletitle").length != 0) {
-		document.getElementsByClassName("tabletitle")[0].innerHTML = theme
+		var index = choices[1].indexOf(theme);
+		document.getElementsByClassName("tabletitle")[0].innerHTML = choicesDisplay[1][index];
 	}
 
 	if (colorChart[theme].length != 2) {
@@ -42,13 +43,16 @@ function legendChange(theme) {
 
 		if (theme === "melting" && "boiling") {
 			var unit = settings["unit"];
+			var newmin = ranges[theme][unit][0];
+			var newmax = ranges[theme][unit][1];
 
 			if (unit != "K") {
 				unit = "°" + unit;
 			}
+			newmin = newmin + " " + unit;
+			newmax = newmax + " " + unit;
 
-			var newmin = ranges[theme][unit][0] + " " + unit;
-			var newmax = ranges[theme][unit][1] + " " + unit;
+
 		} else {
 			var newmin = ranges[theme][0];
 			var newmax = ranges[theme][1];

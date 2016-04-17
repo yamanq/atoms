@@ -203,7 +203,8 @@ function createGradientLegend() {
 
 	var title = document.createElement("h1");
 	title.className = "tabletitle";
-	title.innerHTML = theme;
+	var index = choices[1].indexOf(theme);
+	title.innerHTML = choicesDisplay[1][index];
 	get("titleholder").appendChild(title);
 
 }
