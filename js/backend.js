@@ -137,6 +137,9 @@ function createTable() {
 }*/
 
 function createGradientLegend() {
+
+	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", "", " g/mL", "",""];
+
 	// Create Table element
 	var tbl = document.createElement('table');
 	
@@ -145,6 +148,7 @@ function createGradientLegend() {
 
 	// Gets theme then makes vars for hexes so that repeated table access not necessary
 	var theme = settings["displayTheme"];
+	var index = choices[1].indexOf(theme);
 	var unit = settings["unit"];
 
 	// Filter out non-gradient layouts
@@ -189,8 +193,8 @@ function createGradientLegend() {
 
 
 	} else {
-		var minval = document.createTextNode(ranges[theme][0])
-		var maxval = document.createTextNode(ranges[theme][1])
+		var minval = document.createTextNode(ranges[theme][0] + " " + units[index]);
+		var maxval = document.createTextNode(ranges[theme][1] + " " + units[index]);
 
 	}
 	    min.appendChild(minval);
@@ -203,8 +207,7 @@ function createGradientLegend() {
 
 	var title = document.createElement("h1");
 	title.className = "tabletitle";
-	var index = choices[1].indexOf(theme);
-	title.innerHTML = choicesDisplay[1][index];
+	title.innerHTML = choicesDisplay[1][index] + " (" + units[index] + ")";
 	get("titleholder").appendChild(title);
 
 }

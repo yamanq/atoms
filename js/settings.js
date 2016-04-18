@@ -28,10 +28,12 @@ function tableTheme(theme) {
 }
 
 function legendChange(theme) {
+	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", "", " g/mL", "",""];
+
 	// Title
 	if (document.getElementsByClassName("tabletitle").length != 0) {
 		var index = choices[1].indexOf(theme);
-		document.getElementsByClassName("tabletitle")[0].innerHTML = choicesDisplay[1][index];
+		document.getElementsByClassName("tabletitle")[0].innerHTML = choicesDisplay[1][index] + " (" + units[index] + ")";
 	}
 
 	if (colorChart[theme].length != 2) {
@@ -54,8 +56,8 @@ function legendChange(theme) {
 
 
 		} else {
-			var newmin = ranges[theme][0];
-			var newmax = ranges[theme][1];
+			var newmin = ranges[theme][0] + " " + units[index];
+			var newmax = ranges[theme][1] + " " + units[index];
 		}
 
 		if (document.getElementsByClassName("legend").length != 0) {
