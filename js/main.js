@@ -26,26 +26,6 @@ function update() {
 	legendChange(dispTheme);
 }
 
-function get(name) {
-	// Condensed format for document.getX
-	var elements = [];
-	if(document.getElementsByClassName(name).length > 0) {
-		elements = document.getElementsByClassName(name);
-	} 
-	else if(document.getElementsByTagName(name).length > 0) {
-		for(var a = 0; a < document.getElementsByTagName(name).length; a++) {
-			elements.push(document.getElementsByTagName(name)[a]);
-		}
-	}
-	else if(document.getElementById(name) != null) {
-		elements.push(document.getElementById(name));
-	}
-	
-	if(elements.length == 1) {
-		return elements[0];
-	} else { return elements; } 
-}
-
 var reader = new FileReader();
 var xhr = new XMLHttpRequest();
 
