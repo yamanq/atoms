@@ -33,7 +33,12 @@ function legendChange(theme) {
 	// Title
 	if (document.getElementsByClassName("tabletitle").length != 0) {
 		var index = choices[1].indexOf(theme);
-		document.getElementsByClassName("tabletitle")[0].innerHTML = choicesDisplay[1][index] + " (" + units[index] + ")";
+		if (units[index] != "") {
+			var end = choicesDisplay[1][index] + " (" + units[index] + ")";
+		} else {
+			var end = choicesDisplay[1][index];
+		}
+		document.getElementsByClassName("tabletitle")[0].innerHTML = end;
 	}
 
 	if (colorChart[theme].length != 2) {
