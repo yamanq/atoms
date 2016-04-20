@@ -106,6 +106,12 @@ function get(name) {
     } else { return elements; } 
 }
 
+function deleteElem (id) {
+    var element = document.getElementById(id);
+    elem.parentNode.removeChild(element);
+    
+}
+
 function deleteCookie(setting) {
     // Sets expiration date to past date, deleting cookie automatically
     document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";

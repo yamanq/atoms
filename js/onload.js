@@ -38,14 +38,27 @@ function createTable() {
     }
 }
 
-/* function keyLegend(theme) {
+function keyLegend() {
+ 	// Get theme
+ 	var theme = settings["displayTheme"];
+ 	var index = choices[1].indexOf(theme);
  	// Create Table
  	var tbl = document.createElement('table');
- 	// Class for CSS
- 	tbl.className = "key";
- 	// Get theme
- 	var theme = settings["displayTheme"]; 
-}*/
+ 	// id for CSS
+ 	tbl.id = "keylegend";
+
+ 	for (var i = 0; i < Object.keys(keyColors[index]).length; i++) {
+ 		var tr = tbl.insertRow();
+ 		var keycolor = tr.insertCell();
+ 		keycolor.style.backgroundColor = keyColors[index][Object.keys(keyColors[index])[i]];
+
+ 		var keyname = tr.insertCell();
+ 		keyvalue = document.createTextNode(Object.keys(keyColors[index])[i]);
+ 		keyname.appendChild(keyvalue);
+ 	};
+ 	get("sidebar")[0].appendChild(tbl);
+
+}
 
 function createGradientLegend() {
 
