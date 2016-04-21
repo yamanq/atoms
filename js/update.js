@@ -1,19 +1,22 @@
 function changeTheme(type) {
 	// Changes background image
 	get("body").style.backgroundImage = "url('./resources/static/" + type +".png')";
-
+	get("body").style.color = themeChart["font"][type];
 	// Changes interface element colors
 	for(var i = 0; i < get("pulltab").length; i++) {
 		get("pulltab")[i].style.backgroundColor = themeChart["pulltab"][type];
-		get("pulltab")[i].style.color = themeChart["font"][settings["theme"]].replace(")",",0)");
+		get("pulltab")[i].style.color = themeChart["font"][type].replace(")",",0)");
 		get("pulltab")[i].onmouseover = function() {
-			this.style.color = themeChart["font"][settings["theme"]].replace(")",",1)").replace("b","ba");
+			this.style.color = themeChart["font"][type].replace(")",",1)").replace("b","ba");
 		}
 		get("pulltab")[i].onmouseleave = function() {
-			this.style.color = themeChart["font"][settings["theme"]].replace(")",",0)").replace("b","ba");
+			this.style.color = themeChart["font"][type].replace(")",",0)").replace("b","ba");
 		}
 		get("sidebar")[i].style.backgroundColor = themeChart["sidebar"][type];
-		get("body").style.color = themeChart["font"][type];
+	}
+
+	for(var i = 0; i < get("selection").length; i++) {
+		get("selection")[i].style.color = themeChart["font"][type];
 	}
 }
 
