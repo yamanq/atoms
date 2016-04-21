@@ -60,7 +60,6 @@ function keyLegend() {
 
  	};
  	get("key").appendChild(tbl);
-
 }
 
 function createGradientLegend() {

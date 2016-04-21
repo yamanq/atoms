@@ -27,6 +27,32 @@ function tableTheme(theme) {
 	try {lastElement.click();} catch(err){}
 }
 
+function keyChange(theme) {
+	if (document.getElementById("keylegend") != null) {
+		document.getElementsByClassName("key")[0].removeChild(document.getElementById("keylegend"));
+
+		var index = choices[1].indexOf(theme);
+		// Create Table
+		var tbl = document.createElement('table');
+		// id for CSS
+		tbl.id = "keylegend";
+
+		for (var i = 0; i < Object.keys(keyColors[index]).length; i++) {
+			var tr = tbl.insertRow();
+			var keycolor = tr.insertCell();
+			keycolor.className = "keycolor";
+			keycolor.style.backgroundColor = keyColors[index][Object.keys(keyColors[index])[i]];
+
+			var keyname = tr.insertCell();
+			keyvalue = document.createTextNode(Object.keys(keyColors[index])[i]);
+			keyname.appendChild(keyvalue);
+			keyname.className = "keyvalue";
+
+		};
+		get("key").appendChild(tbl);
+	}
+}
+
 function legendChange(theme) {
 	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", "", " g/mL", "",""];
 

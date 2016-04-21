@@ -24,6 +24,7 @@ function update() {
 	changeTheme(settings["theme"]);
 	tableTheme(dispTheme);
 	legendChange(dispTheme);
+	keyChange(dispTheme)
 }
 
 var reader = new FileReader();
