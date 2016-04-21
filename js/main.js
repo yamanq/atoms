@@ -44,6 +44,6 @@ setTimeout(function mainFunc() {
 	update();
 	makeSettings();
 	tableDesc();
+	keyLegend();
 	createGradientLegend();
-	// keyLegend();
 }, 600);	

@@ -50,13 +50,16 @@ function keyLegend() {
  	for (var i = 0; i < Object.keys(keyColors[index]).length; i++) {
  		var tr = tbl.insertRow();
  		var keycolor = tr.insertCell();
+ 		keycolor.className = "keycolor";
  		keycolor.style.backgroundColor = keyColors[index][Object.keys(keyColors[index])[i]];
 
  		var keyname = tr.insertCell();
  		keyvalue = document.createTextNode(Object.keys(keyColors[index])[i]);
  		keyname.appendChild(keyvalue);
+ 		keyname.className = "keyvalue";
+
  	};
- 	get("sidebar")[0].appendChild(tbl);
+ 	get("key").appendChild(tbl);
 
 }
 

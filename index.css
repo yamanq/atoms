@@ -249,10 +249,28 @@ img {
 	color: #FF746B;
 }
 
+.key {
+	margin-left: 18%;
+	margin-bottom: -20%;
+	margin-top: 10%;
+}
+
+.keycolor {
+	width: 20%;
+	height: 10%;
+}
+
+.keyvalue {
+	line-height: 1em;
+	height: 5%;
+	width: 115%;
+	text-align: left;
+}
+
 .legendholder {
 	margin-bottom: -17%;
 	margin-top: 17%;
-	margin-left: 31%;
+	margin-left: 28%;
 }
 
 .legend {
