@@ -134,7 +134,12 @@ function createGradientLegend() {
 
 	var title = document.createElement("h1");
 	title.className = "tabletitle";
-	title.innerHTML = choicesDisplay[1][index] + " (" + units[index] + ")";
+	if (units[index] != "") {
+			var end = choicesDisplay[1][index] + " (" + units[index] + ")";
+		} else {
+			var end = choicesDisplay[1][index];
+		}
+	title.innerHTML = end;
 	get("titleholder").appendChild(title);
 
 }
