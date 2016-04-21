@@ -248,6 +248,11 @@ img {
 	color: #FF746B;
 }
 
+.tabletitle {
+	margin-left:25%;
+
+}
+
 .key {
 	margin-left: 18%;
 	margin-bottom: -20%;
@@ -267,9 +272,9 @@ img {
 }
 
 .legendholder {
-	margin-bottom: -17%;
-	margin-top: 17%;
-	margin-left: 28%;
+	position:absolute;
+	top: 15%;
+	left: 30%;
 }
 
 .legend {
@@ -286,16 +291,18 @@ img {
 	display: flex;
 }
 
-.maxlegend {
-	margin-top: -4.5%;
-	margin-left: 26.5%;
-}
-
 .minlegend {
-	margin-left: -2%;
-	margin-top: 1%;
+	position: relative;
+	right:10%;
+	bottom:10;
 }
 
+.maxlegend {
+	position: relative;
+	right: 85%;
+	bottom:50;
+
+}
 
 .normal {
 	border: 1px hidden;
