@@ -256,7 +256,7 @@ img {
 .key {
 	margin-left: 18%;
 	margin-bottom: -20%;
-	margin-top: 10%;
+	margin-top: 15%;
 }
 
 .keycolor {
@@ -271,10 +271,15 @@ img {
 	text-align: left;
 }
 
+#keylegend {
+	position: absolute;
+	top: 16%;
+}
+
 .legendholder {
 	position:absolute;
-	top: 15%;
-	left: 30%;
+	top: 16%;
+	left: 35%;
 }
 
 .legend {
@@ -299,7 +304,7 @@ img {
 
 .maxlegend {
 	position: relative;
-	right: 85%;
+	left: 85%;
 	bottom:50;
 
 }
@@ -315,6 +320,7 @@ img {
 }
 
 .infoBox {
+	margin-bottom: 5%;
 	display: flex;
 	cursor: text;
 	-webkit-touch-callout: text;
