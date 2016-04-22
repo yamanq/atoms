@@ -200,7 +200,6 @@ function makeSettings() {
 					this.parentNode.style.opacity = "0";
 					setTimeout(function(){k.parentNode.style.display = "none";},300);
 					// Text transition: opacity 0
-					console.log("hi");
 					textDiv.parentNode.style.color = themeChart["font"][settings["theme"]].replace(")",",0)").replace("b","ba");
 					// Update settings through cookie
 					deleteCookie(setting);

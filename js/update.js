@@ -32,6 +32,8 @@ function tableTheme(theme) {
 
 function keyChange(theme) {
 	if (document.getElementById("keylegend") != null) {
+		var rowlength = 3;
+
 		document.getElementsByClassName("key")[0].removeChild(document.getElementById("keylegend"));
 
 		var index = choices[1].indexOf(theme);
@@ -40,18 +42,22 @@ function keyChange(theme) {
 		// id for CSS
 		tbl.id = "keylegend";
 
-		for (var i = 0; i < Object.keys(keyColors[index]).length; i++) {
-			var tr = tbl.insertRow();
-			var keycolor = tr.insertCell();
-			keycolor.className = "keycolor";
-			keycolor.style.backgroundColor = keyColors[index][Object.keys(keyColors[index])[i]];
+	 	for (var i = 0; i < Object.keys(keyColors[index]).length; i+=rowlength) {
+	 		var tr = tbl.insertRow();
+	 		for (var x = 0; x < rowlength; x++) {
+	 			if ((i + x) < Object.keys(keyColors[index]).length) {
+		 			var keycolor = tr.insertCell();
+			 		keycolor.className = "keycolor";
+			 		keycolor.style.backgroundColor = keyColors[index][Object.keys(keyColors[index])[i + x]];
 
-			var keyname = tr.insertCell();
-			keyvalue = document.createTextNode(Object.keys(keyColors[index])[i]);
-			keyname.appendChild(keyvalue);
-			keyname.className = "keyvalue";
+			 		var keyname = tr.insertCell();
+			 		keyvalue = document.createTextNode(Object.keys(keyColors[index])[i + x]);
+			 		keyname.appendChild(keyvalue);
+			 		keyname.className = "keyvalue";
+			 	}
+	 		}
 
-		};
+	 	};
 		get("key").appendChild(tbl);
 	}
 }
