@@ -433,3 +433,22 @@ img {
 	text-decoration: none;
 	color: #69CBE4;
 }
+
+.realAtom {
+	cursor: pointer;
+}
+
+.eye {
+    -webkit-animation: updown 1.3s infinite alternate ease;
+    animation: updown 1.3s infinite alternate ease;
+}
+
+@-webkit-keyframes updown {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-4px); }
+}
+
+@keyframes updown {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-4px); }
+}
