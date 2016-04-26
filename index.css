@@ -49,8 +49,9 @@ p {
 	margin-bottom: 1%;
 }
 
-td {
-    width:50px;
+.periodictable {
+	color: #000;
+	width:50px;
     height: 65px;
     padding:0;
     margin:0;
@@ -59,10 +60,6 @@ td {
 	-moz-transition: box-shadow 0.3s ease;
 	-ms-transition: box-shadow 0.3s ease; 
 	transition: box-shadow 0.3s ease;
-
-}
-.periodictable {
-	color: #000;
 }
 
 .atom:hover {
@@ -260,14 +257,14 @@ img {
 }
 
 .keycolor {
-	width: 20%;
-	height: 10%;
+	width: 20px;
+	height: 25px;
 }
 
 .keyvalue {
 	line-height: 1em;
 	height: 5%;
-	width: 115%;
+	padding-right: 2.5%;
 	text-align: left;
 }
 
@@ -284,11 +281,11 @@ img {
 
 .legend {
 	border-collapse: collapse;
+	max-width: 55%;
 }
 
 .legendcell {
 	width: 2px;
-
 	height: 25px !important;
 }
 
@@ -304,7 +301,7 @@ img {
 
 .maxlegend {
 	position: relative;
-	left: 85%;
+	left: 43%;
 	bottom:50;
 
 }

@@ -48,7 +48,10 @@ function keyLegend() {
  	var tbl = document.createElement('table');
  	// id for CSS
  	tbl.id = "keylegend";
-
+ 	if(theme == "category") {
+		tbl.style.top = "10%";
+		tbl.style.left = "16.5%";
+ 	}
  	for (var i = 0; i < Object.keys(keyColors[index]).length; i+=rowlength) {
  		var tr = tbl.insertRow();
  		for (var x = 0; x < rowlength; x++) {
@@ -63,7 +66,6 @@ function keyLegend() {
 		 		keyname.className = "keyvalue";
 		 	}
  		}
-
  	};
  	get("key").appendChild(tbl);
 }

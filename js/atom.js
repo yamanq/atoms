@@ -218,7 +218,7 @@ function getAtomDOM(atomNum, size) {
 	var eye = document.createElement("div");
 	eye.style.backgroundColor = changeColor(bgColor,-20);
 	eye.style.borderRadius = "100px / 240px";
-	eye.style.boxShadow = "inset 0 0 0 4px";
+	eye.style.boxShadow = "inset 0 0 0 4px #fff";
 	eye.style.width = size*0.06;
 	eye.style.height = size*0.15;
 	eye.className = "eye";
