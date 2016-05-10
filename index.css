@@ -277,6 +277,7 @@ img {
 	position:absolute;
 	top: 16%;
 	left: 35%;
+	z-index: -1;
 }
 
 .legend {
