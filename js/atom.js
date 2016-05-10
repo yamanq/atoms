@@ -55,7 +55,7 @@ function tableDesc() {
 				if(i == 8 || i == 9) { // If data type is melting or boiling
 					if(info[p[i]][settings["unit"]][index] !== null) {
 						// Get prefix ex. Melting: + actual value + unit
-						changeText(p[i],prefix[i] + info[p[i]][settings["unit"]][index] + " " + settings["unit"]);
+						changeText(p[i],prefix[i] + info[p[i]][settings["unit"]][index] + "° " + settings["unit"]);
 					} else { // If null
 						changeText(p[i],prefix[i] + "Unknown"); // Make unknown
 					}

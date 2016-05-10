@@ -24,10 +24,23 @@ function tableTheme(theme) {
 	for(var i = 0;i < elementCount;i++) {
 		// Changes background color of each cell
 		if (document.getElementsByClassName("periodictable").length != 0) {
-			document.getElementsByClassName("periodictable")[info["location"][i]].style.backgroundColor = getColor(theme, i);
+			var index = get("periodictable")[info["location"][i]];
+			index.style.backgroundColor = getColor(theme, i);
+
+			if(theme == "category") {
+				index.childNodes[2].childNodes[0].nodeValue = "";
+			} else if(theme ==  "melting" || theme == "boiling") {
+				temperatureValue = info[theme][settings["unit"]][i];
+				if(temperatureValue != null) {
+					index.childNodes[2].childNodes[0].nodeValue = temperatureValue + "°";	
+				}
+
+			} else {
+				index.childNodes[2].childNodes[0].nodeValue = info[theme][i];
+			}		
 		}
 	}
-	try {lastElement.click();} catch(err){}
+	try {lastElement.click();} catch(err){} // Last selection still selected when changing themes
 }
 
 function keyChange(theme) {
@@ -66,23 +79,23 @@ function keyChange(theme) {
 }
 
 function legendChange(theme) {
-	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", "", " g/mL", "",""];
+	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", " g/mL", "", ""];
 
 	// Title
-	if (document.getElementsByClassName("tabletitle").length != 0) {
+	if (get("tabletitle").length != 0) {
 		var index = choices[1].indexOf(theme);
 		if (units[index] != "") {
-			var end = choicesDisplay[1][index] + " (" + units[index] + ")";
+			var end = choicesDisplay[1][index] + " (" + units[index] + " )";
 		} else {
 			var end = choicesDisplay[1][index];
 		}
-		document.getElementsByClassName("tabletitle")[0].innerHTML = end;
+		get("tabletitle").innerHTML = end;
 	}
 
 	if (colorChart[theme].length != 2) {
-		document.getElementsByClassName("legendholder")[0].style.display = "none";
+		get("legendholder").style.display = "none";
 	} else {
-		document.getElementsByClassName("legendholder")[0].style.display = "";
+		get("legendholder").style.display = "";
 		var color1 = colorChart[theme][0];
 		var color2 = colorChart[theme][1];
 
@@ -103,14 +116,14 @@ function legendChange(theme) {
 			var newmax = ranges[theme][1] + " " + units[index];
 		}
 
-		if (document.getElementsByClassName("legend").length != 0) {
+		if (get("legend").length != 0) {
 
 			for(var j = 0; j <= 99; j ++) {
-					document.getElementsByClassName("legendcell")[j].style.backgroundColor = gradientColor(color1, color2 , j/100);
+					get("legendcell")[j].style.backgroundColor = gradientColor(color1, color2 , j/100);
 			}
 
-			document.getElementsByClassName("minlegend")[0].innerHTML = newmin;
-			document.getElementsByClassName("maxlegend")[0].innerHTML = newmax;
+			get("minlegend").innerHTML = newmin;
+			get("maxlegend").innerHTML = newmax;
 		}
 	}
 }

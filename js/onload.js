@@ -33,7 +33,11 @@ function createTable() {
     	ele.appendChild(text);
     	cells[info["location"][i]].appendChild(ele);
     	text = document.createTextNode(info["shorthand"][i]);
+    	value = document.createElement("p");
+    	value.appendChild(document.createTextNode(""));
+    	value.className = "atomvalue";
     	cells[info["location"][i]].appendChild(text);
+    	cells[info["location"][i]].appendChild(value);
     	cells[info["location"][i]].className = cells[info["location"][i]].className +" atom"; // Adds class to prevent hover animation on blank cells
     }
 }
@@ -72,7 +76,7 @@ function keyLegend() {
 
 function createGradientLegend() {
 
-	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", "", " g/mL", "",""];
+	var units = [""," pm"," g/mol", " kJ/mol"," kJ/mol", " eV", " g/mL", "", ""];
 
 	// Create Table element
 	var tbl = document.createElement('table');
@@ -142,7 +146,7 @@ function createGradientLegend() {
 	var title = document.createElement("h1");
 	title.className = "tabletitle";
 	if (units[index] != "") {
-			var end = choicesDisplay[1][index] + " (" + units[index] + ")";
+			var end = choicesDisplay[1][index] + " (" + units[index] + " )";
 		} else {
 			var end = choicesDisplay[1][index];
 		}
