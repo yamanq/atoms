@@ -204,7 +204,7 @@ function getAtomDOM(atomNum, size) {
 	circle.style.left = size*0.075;
 	var bgColor = getColor(settings["displayTheme"],atomNum);
 	circle.style.backgroundColor = bgColor;
-	circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20);
+	circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor,20) + ", inset 0 0 10px 30px " + changeColor(bgColor,-20) + ", 1px 4px 16px 6px #444";
 	
 	var eyes = document.createElement("div");
 	eyes.style.display = "flex";
