@@ -1,14 +1,14 @@
 get("pulltab")[0].onclick = function(){open(get("elements"));}
-get("pulltab")[1].onclick = function(){open(get("settings"));}
-get("pulltab")[2].onclick = function(){open(get("tools"));}
+get("pulltab")[1].onclick = function(){open(get("tools"));}
+get("pulltab")[2].onclick = function(){open(get("settings"));}
 get("fa")[0].onclick = function() {
 	get("elements").style.marginLeft = "-150%";
 }
 get("fa")[1].onclick = function() {
-	get("settings").style.marginLeft = "-40%";
+	get("tools").style.marginLeft = "-170%";
 }
 get("fa")[2].onclick = function() {
-	get("tools").style.marginLeft = "-170%";
+	get("settings").style.marginLeft = "-40%";
 }
 
 function open(dom) {
