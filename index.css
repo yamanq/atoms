@@ -49,6 +49,10 @@ p {
 	margin-bottom: 1%;
 }
 
+input {
+	font-family: Oswald;
+}
+
 .periodictable {
 	color: #000;
 	width:50px;
@@ -203,6 +207,10 @@ img {
 	margin-top: 12%;
 }
 
+.third {
+	margin-top: 19%;
+}
+
 .sidebar {
 	position: absolute;
 	background-color: #e6f5ff;
@@ -228,6 +236,12 @@ img {
 .settings {
 	margin-left: -40%;
 	width: 20%;
+}
+
+.tools {
+	margin-left: -170%;
+	height: 100%;
+	width: 90%;
 }
 
 .atom {
@@ -443,6 +457,31 @@ img {
 .eye {
     -webkit-animation: updown 1.3s infinite alternate ease;
     animation: updown 1.3s infinite alternate ease;
+}
+
+#balancebutton {
+	width: 10%;
+	font-size: 175%;
+	margin-right: 3%;
+	padding: .5%;
+	text-align:center;
+	box-shadow:inset 0 0 0 99999px rgba(0,0,0,0.2);
+
+	-webkit-transition: box-shadow 0.3s ease;
+	-moz-transition: box-shadow 0.3s ease;
+	-ms-transition: box-shadow 0.3s ease; 
+	transition: box-shadow 0.3s ease;
+}
+
+#balancebutton:hover {
+	box-shadow: inset 0 0 0 99999px rgba(0,0,0,0.1);
+}
+
+.balanceout {
+	text-align: center;
+	width: 15%;
+	height: 4%;
+	font-size: 110%;
 }
 
 @-webkit-keyframes updown {

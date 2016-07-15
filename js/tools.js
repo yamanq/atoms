@@ -138,3 +138,158 @@ function getRanges() {
         }           
     }
 }
+
+function balanceEquation(reactant, product) {
+    var compounds = [];
+    var vary = [];
+    var matrix = [];
+    var freeMatrix = [];
+    
+    // Create array from inputs.
+    formulaStr = reactant + "+" + product;
+    compounds = formulaStr.replace(/\s/g,"").split("+");
+    
+    // Create element matrix.
+    for(var i = 0; i < compounds.length; i++) {
+        var counter = 0;
+        var indexes = [];
+
+        currString = compounds[i];
+        compounds[i] = [compounds[i]];
+        
+        while(counter < currString.length) {
+            if(currString[counter] == currString[counter].toUpperCase() && isNaN(currString[counter])) {
+                indexes.push(counter);  
+            }
+            counter += 1;
+        }
+
+        indexes.push(currString.length);
+        
+        for(var j = 0; j < indexes.length-1; j++) {
+            element = currString.substring(indexes[j],indexes[j+1]);
+            elementNoNum = element.replace(/[0-9]/g,"");
+
+            if(vary.indexOf(elementNoNum) == -1) {
+                vary.push(elementNoNum);
+            }
+
+            if(element.search(/[0-9]/g) != -1) {
+                compounds[i].push([elementNoNum,parseInt(element.replace(/\D/g,""))]);
+            } else {
+                compounds[i].push([elementNoNum,1]);
+            }
+        }      
+    }
+    
+    for(var x = 0; x < vary.length; x++) {
+        matrix[x] = [];
+        for(var y = 0; y < compounds.length; y++) {
+            var pushed = false;
+            for(var z = 1; z < compounds[y].length; z++) {
+                if(compounds[y][z][0] == vary[x]) {
+                    matrix[x].push(compounds[y][z][1]);
+                    pushed = true;
+                    break;
+                }
+            }
+            if(!pushed) {
+                matrix[x].push(0);
+            }
+        }
+    }
+
+    // Get Reduced Row Echelon Form.
+    var lead = 0;
+    var rows = matrix.length;
+    var columns = matrix[0].length;
+            
+    for(var a = 0; a < rows; a++) {
+        var breakOut = false;
+        if(columns <= lead) {
+            break;
+        }
+        var e = a;
+        while(matrix[e][lead] === 0) {
+            e++;
+            if(rows == e) {
+                e = a;
+                lead++;
+                if(columns == lead) {
+                    breakOut = true;
+                    break;
+                }
+            }
+        }
+        
+        if(breakOut) break;
+        
+        var tmp = matrix[e];
+        matrix[e] = matrix[a];
+        matrix[a] = tmp;
+
+        var val = matrix[a][lead];
+        for(var b = 0; b < columns; b++) {
+            matrix[a][b] /= val;
+        }
+        
+        for(var c = 0; c < rows; c++) {
+            if (c == a) continue;
+            val = matrix[c][lead];
+            for(var d = 0; d < columns; d++) {
+                matrix[c][d] -= val * matrix[a][d];
+            }
+        }
+        lead++;
+         
+    }
+    
+    // Extract free matrix.
+    for(var f = 0; f < matrix.length-1; f++) {
+        freeMatrix.push(matrix[f][matrix[f].length-1]);
+    }
+    freeMatrix.push(1);
+    
+    // Multiply all to integers.
+    var power = 1;
+    var testPow = 1;
+    
+    for(var g = 0; g < freeMatrix.length; g++) {
+        var testInt = freeMatrix[g] * Math.pow(10,testPow);     
+        while(!(testInt == parseInt(testInt))) {
+            testPow += 1;
+        }
+        if(testPow > power) {
+            power = testPow;
+        }
+    }
+    
+    for(var h = 0; h < freeMatrix.length; h++) {
+        freeMatrix[h] *= Math.pow(10,power);
+    }
+    
+    // Get GCD.
+    var gcd = freeMatrix[0];
+    
+    for(var u = 0; u < freeMatrix.length-2; u++) {
+        gcd = getGCD(gcd, freeMatrix[u+1]); 
+    }
+    
+    // Get final answers.
+    for(var w = 0; w < freeMatrix.length; w++) {
+        freeMatrix[w] /= gcd;
+        freeMatrix[w] = Math.abs(freeMatrix[w]);
+        if(freeMatrix[w] != 1) {
+            freeMatrix[w] += compounds[w][0]; 
+        } else {
+            freeMatrix[w] = compounds[w][0];
+        }
+    }
+    
+    return freeMatrix;
+}
+
+function getGCD(a,b) {
+    if(!b) return a;
+    return getGCD(b, a % b);
+}
