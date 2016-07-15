@@ -215,8 +215,6 @@ function getAtomDOM(atomNum, size) {
 	eyes.style.position = "absolute";
 	var eyesWidth = size*0.17;
 	var eyesHeight = size*0.15;
-	eyes.style.width = eyesWidth;
-	eyes.style.height = eyesHeight;
 	eyes.style.top = size*0.425 - eyesHeight/2;
 	eyes.style.left = size*0.67 - eyesWidth/2;
 	var eye = document.createElement("div");
