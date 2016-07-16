@@ -145,16 +145,16 @@ function balanceEquation(reactant, product) {
     var matrix = [];
     var freeMatrix = [];
     var finalMatrix = [];
-
+    
     // Create array from inputs.
     formulaStr = reactant + "+" + product;
     compounds = formulaStr.replace(/\s/g,"").split("+");
 
-    // Create element matrix.
+    // Create element matrix list.
     for(var i = 0; i < compounds.length; i++) {
         var counter = 0;
         var indexes = [];
-
+        
         currString = compounds[i];
         compounds[i] = [compounds[i]];
         
@@ -171,7 +171,7 @@ function balanceEquation(reactant, product) {
             element = currString.substring(indexes[j],indexes[j+1]);
             elementNoNum = element.replace(/[0-9]/g,"");
 
-            if(vary.indexOf(elementNoNum) == -1) {
+            if(vary.indexOf(elementNoNum) == -1 && elementNoNum != '(' && elementNoNum != ')') {
                 vary.push(elementNoNum);
             }
 
@@ -182,7 +182,63 @@ function balanceEquation(reactant, product) {
             }
         }      
     }
-       
+    
+    //Parenthesis handling.
+    for(var r = 0; r < compounds.length; r++) {
+        var s = 1;
+        while(s < compounds[r].length) {
+            if(compounds[r][s][0] == "(") {
+                var count = 1;
+                var v = s;
+
+                while(count > 0) {
+                    v++;
+                    if(compounds[r][v][0] == "(") count++;
+                    if(compounds[r][v][0] == ")") count--;
+                }
+                
+                var curr = compounds[r];
+                var times = curr[v][1];
+                var before = curr.splice(0,s);
+                var mid = curr.splice(1,v-1-before.length);
+                
+                var ae = 0;
+                var open = 0;
+
+                while(ae < curr.length) {
+                    if(curr[ae][0] == "(") {
+                        open++;
+                        if(open == 1) curr.splice(ae,ae+1);
+                    } else if(curr[ae][0] == ")") {
+                        open--;
+                        if(open === 0) curr.splice(ae,ae+1);
+                        break;
+                    } else {
+                        ae++;
+                    }
+                }
+                var after = curr;
+                for(var ab = 0; ab < mid.length; ab++) {
+                    if(times > 1) {
+                        mid[ab][1] *= times;
+                        before.push(mid[ab]);
+                    } else {
+                        before.push(mid[ab]);
+                    }
+                }
+                if(after !== 0) {
+                    for(var ac = 0; ac < after.length; ac++) {
+                        before.push(after[ac]);
+                    }
+                }
+                compounds[r] = before;
+                s=0;
+            }
+            s++;
+        }
+    }
+
+    // Create matrix.
     for(var x = 0; x < vary.length; x++) {
         matrix[x] = [];
         for(var y = 0; y < compounds.length; y++) {
@@ -243,7 +299,23 @@ function balanceEquation(reactant, product) {
         }
         lead++;
     }
-
+    
+    // Remove redundant lines.
+    for(var r = 0; r < matrix.length; r++) {
+        var splice = true;
+        for(var q = 0; q < matrix[0].length; q++) {
+            if(matrix[r][q] === 0 && splice === false) {
+                splice = true;
+            } else {
+                splice = false;
+            }
+        }
+        if(splice) {
+            matrix.splice(r,r+1);
+            r = 0;
+        }
+    }
+        
     // Extract free matrix.
     var rank = matrix.length;
     for(var m = 0; m < rank; m++) {
@@ -264,7 +336,7 @@ function balanceEquation(reactant, product) {
             }
         }
     }
-
+    
     // Adding and converting into 1 column/row.
     for(var o = 0; o < freeMatrix.length; o++) {
         var value = 0;
@@ -273,7 +345,7 @@ function balanceEquation(reactant, product) {
         }
         finalMatrix.push(value);
     }
-
+    
     // Multiply all to integers.
     var mul = 1;
     var testMul = 1;
@@ -294,12 +366,13 @@ function balanceEquation(reactant, product) {
     }
 
     // Get GCD.
-    var gcd = finalMatrix[0];
+    var gcd;
     
-    for(var u = 0; u < finalMatrix.length-2; u++) {
-        gcd = getGCD(gcd, finalMatrix[u+1]); 
+    for(var u = 0; u < finalMatrix.length-1; u++) {
+        gcd = getGCD(finalMatrix[u], finalMatrix[u+1]); 
+
     }
-    
+
     // Get final answers.
     for(var w = 0; w < finalMatrix.length; w++) {
         finalMatrix[w] /= gcd;
@@ -310,7 +383,7 @@ function balanceEquation(reactant, product) {
             finalMatrix[w] = compounds[w][0];
         }
     }
-    
+
     return finalMatrix;
 }
 
