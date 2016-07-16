@@ -144,11 +144,12 @@ function balanceEquation(reactant, product) {
     var vary = [];
     var matrix = [];
     var freeMatrix = [];
-    
+    var finalMatrix = [];
+
     // Create array from inputs.
     formulaStr = reactant + "+" + product;
     compounds = formulaStr.replace(/\s/g,"").split("+");
-    
+
     // Create element matrix.
     for(var i = 0; i < compounds.length; i++) {
         var counter = 0;
@@ -181,7 +182,7 @@ function balanceEquation(reactant, product) {
             }
         }      
     }
-    
+       
     for(var x = 0; x < vary.length; x++) {
         matrix[x] = [];
         for(var y = 0; y < compounds.length; y++) {
@@ -241,52 +242,76 @@ function balanceEquation(reactant, product) {
             }
         }
         lead++;
-         
     }
-    
+
     // Extract free matrix.
-    for(var f = 0; f < matrix.length-1; f++) {
-        freeMatrix.push(matrix[f][matrix[f].length-1]);
+    var rank = matrix.length;
+    for(var m = 0; m < rank; m++) {
+        freeMatrix[m] = [];
+        for(var n = rank; n < matrix[0].length; n++) {
+            freeMatrix[m].push(-1*matrix[m][n]);
+        }
     }
-    freeMatrix.push(1);
     
+    // Adding identity matrix.
+    for(var e = 0; e < compounds.length-freeMatrix.length; e++) {
+        freeMatrix.push([]);
+        for(var f = 0; f < compounds.length-rank; f++) {
+            if((f/2) == parseInt(f/2)) {
+                freeMatrix[e+rank].push(1);
+            } else {
+                freeMatrix[e+rank].push(0);
+            }
+        }
+    }
+
+    // Adding and converting into 1 column/row.
+    for(var o = 0; o < freeMatrix.length; o++) {
+        var value = 0;
+        for(var p = 0; p< freeMatrix[0].length; p++) {
+            value += freeMatrix[o][p];
+        }
+        finalMatrix.push(value);
+    }
+
     // Multiply all to integers.
-    var power = 1;
-    var testPow = 1;
+    var mul = 1;
+    var testMul = 1;
     
-    for(var g = 0; g < freeMatrix.length; g++) {
-        var testInt = freeMatrix[g] * Math.pow(10,testPow);     
-        while(!(testInt == parseInt(testInt))) {
-            testPow += 1;
+    for(var g = 0; g < finalMatrix.length; g++) {
+        var testInt = finalMatrix[g] * testMul;
+        while(testInt != parseInt(testInt)) {
+            testMul += 1;
+            testInt = finalMatrix[g] * testMul;
         }
-        if(testPow > power) {
-            power = testPow;
+        if(testMul < mul) {
+            mul = testMul;
         }
     }
     
-    for(var h = 0; h < freeMatrix.length; h++) {
-        freeMatrix[h] *= Math.pow(10,power);
+    for(var h = 0; h < finalMatrix.length; h++) {
+        finalMatrix[h] *= testMul;
     }
-    
+
     // Get GCD.
-    var gcd = freeMatrix[0];
+    var gcd = finalMatrix[0];
     
-    for(var u = 0; u < freeMatrix.length-2; u++) {
-        gcd = getGCD(gcd, freeMatrix[u+1]); 
+    for(var u = 0; u < finalMatrix.length-2; u++) {
+        gcd = getGCD(gcd, finalMatrix[u+1]); 
     }
     
     // Get final answers.
-    for(var w = 0; w < freeMatrix.length; w++) {
-        freeMatrix[w] /= gcd;
-        freeMatrix[w] = Math.abs(freeMatrix[w]);
-        if(freeMatrix[w] != 1) {
-            freeMatrix[w] += compounds[w][0]; 
+    for(var w = 0; w < finalMatrix.length; w++) {
+        finalMatrix[w] /= gcd;
+        finalMatrix[w] = Math.abs(finalMatrix[w]);
+        if(finalMatrix[w] != 1) {
+            finalMatrix[w] += compounds[w][0]; 
         } else {
-            freeMatrix[w] = compounds[w][0];
+            finalMatrix[w] = compounds[w][0];
         }
     }
     
-    return freeMatrix;
+    return finalMatrix;
 }
 
 function getGCD(a,b) {
