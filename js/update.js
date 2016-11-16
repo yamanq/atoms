@@ -30,7 +30,7 @@ function tableTheme(theme) {
 			if(theme == "category") {
 				index.childNodes[2].childNodes[0].nodeValue = "";
 			} else if(theme ==  "melting" || theme == "boiling") {
-				temperatureValue = info[theme][settings["unit"]][i];
+				  temperatureValue = convertUnit(info[theme][i], settings.unit);
 				if(temperatureValue != null) {
 					index.childNodes[2].childNodes[0].nodeValue = temperatureValue + "°";	
 				}
@@ -99,7 +99,7 @@ function legendChange(theme) {
 		var color1 = colorChart[theme][0];
 		var color2 = colorChart[theme][1];
 
-		if (theme === "melting" && "boiling") {
+		if (theme === "melting" || "boiling") {
 			var unit = settings["unit"];
 			var newmin = ranges[theme][unit][0];
 			var newmax = ranges[theme][unit][1];

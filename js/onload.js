@@ -126,8 +126,8 @@ function createGradientLegend() {
 		} else {
 			var extra = " °" + unit;
 	    }
-	    var minval = document.createTextNode(ranges[theme][unit][0] + extra);
-	    var maxval = document.createTextNode(ranges[theme][unit][1] + extra); 
+	    var minval = document.createTextNode(convertUnit(ranges[theme][0], unit) + extra);
+	    var maxval = document.createTextNode(convertUnit(ranges[theme][1], unit) + extra); 
 
 
 	} else {

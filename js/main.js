@@ -4,7 +4,7 @@ function getJSON() {
 	    if (xhr.readyState == 4) {
 	        info = JSON.parse(xhr.responseText);
 	    }
-	}
+	};
 	xhr.send(null);
 }
 
@@ -24,13 +24,13 @@ function update() {
 	changeTheme(settings["theme"]);
 	tableTheme(dispTheme);
 	legendChange(dispTheme);
-	keyChange(dispTheme)
+	  keyChange(dispTheme);
 }
 
 var reader = new FileReader();
 var xhr = new XMLHttpRequest();
 
-if(document.cookie == "") { // Set defaults if no cookie
+if(document.cookie === "") { // Set defaults if no cookie
 	document.cookie = "theme=light";
 	document.cookie = "displayTheme=category;";
 	document.cookie = "elecConf=abr;";

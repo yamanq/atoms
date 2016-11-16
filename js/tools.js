@@ -1,73 +1,72 @@
 function getColor(theme, atomNum) {
-    if(theme == "category") {
-        var color = colorChart[theme][info[theme][atomNum]];    
-    } else if(theme == "melting" || theme == "boiling") { 
-        if(info[theme]["K"][atomNum] == null) { // if value is null
-            color = "#41484D";
-        } else {
-            // Value - Min(all values) / Max(all values) - Min(all values)
-            var ratio = (info[theme]["K"][atomNum] - ranges[theme]["K"][0]) / ranges[theme]["K"][2];
-            var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); // high, low, ratio
-        }   
+    var color;
+    var ratio;
+    if (theme == "category") {
+        color = colorChart[theme][info[theme][atomNum]];
     } else {
-        if(info[theme][atomNum] == null) { // if value is null
+        if (info[theme][atomNum] === null) { // if value is null
             color = "#41484D";
         } else {
             // Value - Min(all values) / Max(all values) - Min(all values)
-            var ratio = (info[theme][atomNum] - ranges[theme][0]) / ranges[theme][2];
-            var color = gradientColor(colorChart[theme][0],colorChart[theme][1], ratio); 
+            ratio = (info[theme][atomNum] - ranges[theme][0]) / ranges[theme][2];
+            color = gradientColor(colorChart[theme][0], colorChart[theme][1], ratio);
         }
     }
 
     return color;
 }
 
+function convertUnit(Kval, unit) {
+    if (unit === "C") {
+        return Kval - 273.15;
+    } else if (unit === "F") {
+        return (1.8 * Kval) - 459.67;
+    } else {
+        return Kval;
+    }
+}
+
 function changeColor(hex, amt) {
 
-	hex = hex.slice(1);
-    var num = parseInt(hex,16);
+    hex = hex.slice(1);
+    var num = parseInt(hex, 16);
     var r = (num >> 16) + amt;
- 
+
     if (r > 255) r = 255;
-    else if  (r < 0) r = 0;
- 
+    else if (r < 0) r = 0;
+
     var b = ((num >> 8) & 0x00FF) + amt;
- 
+
     if (b > 255) b = 255;
-    else if  (b < 0) b = 0;
- 
+    else if (b < 0) b = 0;
+
     var g = (num & 0x0000FF) + amt;
- 
+
     if (g > 255) g = 255;
     else if (g < 0) g = 0;
- 	
- 	var final = (g | (b << 8) | (r << 16)).toString(16);
 
- 	// Adds preceeding zeros
- 	while (final.length < 6) {final = "0" + final};
+    var final = (g | (b << 8) | (r << 16)).toString(16);
+
+    // Adds preceeding zeros
+    while (final.length < 6) {
+        final = "0" + final;
+    }
     return "#" + final;
 }
 
 function gradientColor(hex1, hex2, ratio) {
+    // Creates end table for finished hex parts
+    var donetable = [];
 
     // Splits hex1 into 3 pieces (2 char each)
-    var hex1 = hex1.replace("#", "").match(/.{1,2}/g);
+    hex1 = hex1.replace("#", "").match(/.{1,2}/g);
+    hex2 = hex2.replace("#", "").match(/.{1,2}/g);
     // Converts each one into int
 
     for (var i = 0; i <= 2; i++) {
         hex1[i] = parseInt(hex1[i], 16);
-    }
-
-    // Does above process for hex2
-    var hex2 = hex2.replace("#", "").match(/.{1,2}/g);
-    for (var i = 0; i <= 2; i++) {
         hex2[i] = parseInt(hex2[i], 16);
-    }
 
-    // Creates end table for finished hex parts
-    var donetable = [];
-    // Averages each of the three parts between hex1 and hex2
-    for (var i = 0; i <= 2; i++) {
         // Weighted average to get exact gradient necessary and not average
         // Round to prevent weird hex decimal shenanigans
         var val = Math.round((ratio) * hex1[i] + (1 - ratio) * hex2[i]);
@@ -79,7 +78,6 @@ function gradientColor(hex1, hex2, ratio) {
         }
         donetable[i] = val;
     }
-
     // Rejoins hex and adds #
     done = "#" + donetable.join("");
 
@@ -89,168 +87,155 @@ function gradientColor(hex1, hex2, ratio) {
 function get(name) {
     // Condensed format for document.getX
     var elements = [];
-    if(document.getElementsByClassName(name).length > 0) {
-        elements = document.getElementsByClassName(name);
-    } 
-    else if(document.getElementsByTagName(name).length > 0) {
-        for(var a = 0; a < document.getElementsByTagName(name).length; a++) {
-            elements.push(document.getElementsByTagName(name)[a]);
-        }
-    }
-    else if(document.getElementById(name) != null) {
-        elements.push(document.getElementById(name));
-    }
-    
-    if(elements.length == 1) {
+    classname = document.getElementsByClassName(name);
+    tagname = document.getElementsByTagName(name);
+    idname = document.getElementById(name);
+    if (classname.length > 0) elements = classname;
+    else if (tagname.length > 0) elements = elements.concat(tagname);
+    else if (idname !== null)elements.push(document.getElementById(name));
+
+    if (elements.length == 1) {
         return elements[0];
-    } else { return elements; } 
+    } else {
+        return elements;
+    }
 }
 
-function deleteElem (id) {
+function deleteElem(id) {
     var element = document.getElementById(id);
     elem.parentNode.removeChild(element);
-    
 }
 
 function deleteCookie(setting) {
     // Sets expiration date to past date, deleting cookie automatically
-    document.cookie = setting+"=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
+    document.cookie = setting + "=; expires=Thu, 01 Jan 2000 00:00:00 GMT";
 }
 
 function getRanges() {
     // Format of ranges is [Min, Max, Range]
-    for(var i = 1; i < choices[1].length; i++) { // Possible data types are options except for category
-        var option = choices[1][i]; 
-        if(i == 7 || i == 8) {
-            ranges[option] = {};
-            for(var j = 0; j < 3; j++) { // Units for temperatures
-                var unit = choices[3][j];
-                var min = Math.min.apply(null,info[option][unit]);
-                var max = Math.max.apply(null,info[option][unit]);
-                var range = max - min;
-                ranges[option][unit] = [min,max,range];
-            }       
-        } else {
-            var min = Math.min.apply(null,info[option]);
-            var max = Math.max.apply(null,info[option]);
+    for (var i = 1; i < choices[1].length; i++) { // Possible data types are options except for category
+        var option = choices[1][i];
+            var min = Math.min.apply(null, info[option]);
+            var max = Math.max.apply(null, info[option]);
             var range = max - min;
-            ranges[option] = [min,max,range];
-        }           
+            ranges[option] = [min, max, range];
     }
 }
 
 function balanceEquation(reactant, product) {
+    // TODO NOT working
+    // TODO shorten code
     var compounds = [];
     var vary = [];
     var matrix = [];
     var freeMatrix = [];
     var finalMatrix = [];
-    
+
     // Create array from inputs.
     formulaStr = reactant + "+" + product;
-    compounds = formulaStr.replace(/\s/g,"").split("+");
+    compounds = formulaStr.replace(/\s/g, "").split("+");
 
     // Create element matrix list.
-    for(var i = 0; i < compounds.length; i++) {
+    for (var i = 0; i < compounds.length; i++) {
         var counter = 0;
         var indexes = [];
-        
+
         currString = compounds[i];
         compounds[i] = [compounds[i]];
-        
-        while(counter < currString.length) {
-            if(currString[counter] == currString[counter].toUpperCase() && isNaN(currString[counter])) {
-                indexes.push(counter);  
+
+        while (counter < currString.length) {
+            if (currString[counter] == currString[counter].toUpperCase() && isNaN(currString[counter])) {
+                indexes.push(counter);
             }
             counter += 1;
         }
 
         indexes.push(currString.length);
-        
-        for(var j = 0; j < indexes.length-1; j++) {
-            element = currString.substring(indexes[j],indexes[j+1]);
-            elementNoNum = element.replace(/[0-9]/g,"");
 
-            if(vary.indexOf(elementNoNum) == -1 && elementNoNum != '(' && elementNoNum != ')') {
+        for (var j = 0; j < indexes.length - 1; j++) {
+            element = currString.substring(indexes[j], indexes[j + 1]);
+            elementNoNum = element.replace(/[0-9]/g, "");
+
+            if (vary.indexOf(elementNoNum) == -1 && elementNoNum != '(' && elementNoNum != ')') {
                 vary.push(elementNoNum);
             }
 
-            if(element.search(/[0-9]/g) != -1) {
-                compounds[i].push([elementNoNum,parseInt(element.replace(/\D/g,""))]);
+            if (element.search(/[0-9]/g) != -1) {
+                compounds[i].push([elementNoNum, parseInt(element.replace(/\D/g, ""))]);
             } else {
-                compounds[i].push([elementNoNum,1]);
+                compounds[i].push([elementNoNum, 1]);
             }
-        }      
+        }
     }
-    
+
     //Parenthesis handling.
-    for(var r = 0; r < compounds.length; r++) {
+    for (var r = 0; r < compounds.length; r++) {
         var s = 1;
-        while(s < compounds[r].length) {
-            if(compounds[r][s][0] == "(") {
+        while (s < compounds[r].length) {
+            if (compounds[r][s][0] == "(") {
                 var count = 1;
                 var v = s;
 
-                while(count > 0) {
+                while (count > 0) {
                     v++;
-                    if(compounds[r][v][0] == "(") count++;
-                    if(compounds[r][v][0] == ")") count--;
+                    if (compounds[r][v][0] == "(") count++;
+                    if (compounds[r][v][0] == ")") count--;
                 }
-                
+
                 var curr = compounds[r];
                 var times = curr[v][1];
-                var before = curr.splice(0,s);
-                var mid = curr.splice(1,v-1-before.length);
-                
+                var before = curr.splice(0, s);
+                var mid = curr.splice(1, v - 1 - before.length);
+
                 var ae = 0;
                 var open = 0;
 
-                while(ae < curr.length) {
-                    if(curr[ae][0] == "(") {
+                while (ae < curr.length) {
+                    if (curr[ae][0] == "(") {
                         open++;
-                        if(open == 1) curr.splice(ae,ae+1);
-                    } else if(curr[ae][0] == ")") {
+                        if (open == 1) curr.splice(ae, ae + 1);
+                    } else if (curr[ae][0] == ")") {
                         open--;
-                        if(open === 0) curr.splice(ae,ae+1);
+                        if (open === 0) curr.splice(ae, ae + 1);
                         break;
                     } else {
                         ae++;
                     }
                 }
                 var after = curr;
-                for(var ab = 0; ab < mid.length; ab++) {
-                    if(times > 1) {
+                for (var ab = 0; ab < mid.length; ab++) {
+                    if (times > 1) {
                         mid[ab][1] *= times;
                         before.push(mid[ab]);
                     } else {
                         before.push(mid[ab]);
                     }
                 }
-                if(after !== 0) {
-                    for(var ac = 0; ac < after.length; ac++) {
+                if (after !== 0) {
+                    for (var ac = 0; ac < after.length; ac++) {
                         before.push(after[ac]);
                     }
                 }
                 compounds[r] = before;
-                s=0;
+                s = 0;
             }
             s++;
         }
     }
 
     // Create matrix.
-    for(var x = 0; x < vary.length; x++) {
+    for (var x = 0; x < vary.length; x++) {
         matrix[x] = [];
-        for(var y = 0; y < compounds.length; y++) {
+        for (var y = 0; y < compounds.length; y++) {
             var pushed = false;
-            for(var z = 1; z < compounds[y].length; z++) {
-                if(compounds[y][z][0] == vary[x]) {
+            for (var z = 1; z < compounds[y].length; z++) {
+                if (compounds[y][z][0] == vary[x]) {
                     matrix[x].push(compounds[y][z][1]);
                     pushed = true;
                     break;
                 }
             }
-            if(!pushed) {
+            if (!pushed) {
                 matrix[x].push(0);
             }
         }
@@ -260,125 +245,125 @@ function balanceEquation(reactant, product) {
     var lead = 0;
     var rows = matrix.length;
     var columns = matrix[0].length;
-            
-    for(var a = 0; a < rows; a++) {
+
+    for (var a = 0; a < rows; a++) {
         var breakOut = false;
-        if(columns <= lead) {
+        if (columns <= lead) {
             break;
         }
         var e = a;
-        while(matrix[e][lead] === 0) {
+        while (matrix[e][lead] === 0) {
             e++;
-            if(rows == e) {
+            if (rows == e) {
                 e = a;
                 lead++;
-                if(columns == lead) {
+                if (columns == lead) {
                     breakOut = true;
                     break;
                 }
             }
         }
-        
-        if(breakOut) break;
-        
+
+        if (breakOut) break;
+
         var tmp = matrix[e];
         matrix[e] = matrix[a];
         matrix[a] = tmp;
 
         var val = matrix[a][lead];
-        for(var b = 0; b < columns; b++) {
+        for (var b = 0; b < columns; b++) {
             matrix[a][b] /= val;
         }
-        
-        for(var c = 0; c < rows; c++) {
+
+        for (var c = 0; c < rows; c++) {
             if (c == a) continue;
             val = matrix[c][lead];
-            for(var d = 0; d < columns; d++) {
+            for (var d = 0; d < columns; d++) {
                 matrix[c][d] -= val * matrix[a][d];
             }
         }
         lead++;
     }
-    
+
     // Remove redundant lines.
-    for(var r = 0; r < matrix.length; r++) {
+    for (var r = 0; r < matrix.length; r++) {
         var splice = true;
-        for(var q = 0; q < matrix[0].length; q++) {
-            if(matrix[r][q] === 0 && splice === false) {
+        for (var q = 0; q < matrix[0].length; q++) {
+            if (matrix[r][q] === 0 && splice === false) {
                 splice = true;
             } else {
                 splice = false;
             }
         }
-        if(splice) {
-            matrix.splice(r,r+1);
+        if (splice) {
+            matrix.splice(r, r + 1);
             r = 0;
         }
     }
-        
+
     // Extract free matrix.
     var rank = matrix.length;
-    for(var m = 0; m < rank; m++) {
+    for (var m = 0; m < rank; m++) {
         freeMatrix[m] = [];
-        for(var n = rank; n < matrix[0].length; n++) {
-            freeMatrix[m].push(-1*matrix[m][n]);
+        for (var n = rank; n < matrix[0].length; n++) {
+            freeMatrix[m].push(-1 * matrix[m][n]);
         }
     }
-    
+
     // Adding identity matrix.
-    for(var e = 0; e < compounds.length-freeMatrix.length; e++) {
+    for (var e = 0; e < compounds.length - freeMatrix.length; e++) {
         freeMatrix.push([]);
-        for(var f = 0; f < compounds.length-rank; f++) {
-            if((f/2) == parseInt(f/2)) {
-                freeMatrix[e+rank].push(1);
+        for (var f = 0; f < compounds.length - rank; f++) {
+            if ((f / 2) == parseInt(f / 2)) {
+                freeMatrix[e + rank].push(1);
             } else {
-                freeMatrix[e+rank].push(0);
+                freeMatrix[e + rank].push(0);
             }
         }
     }
-    
+
     // Adding and converting into 1 column/row.
-    for(var o = 0; o < freeMatrix.length; o++) {
+    for (var o = 0; o < freeMatrix.length; o++) {
         var value = 0;
-        for(var p = 0; p< freeMatrix[0].length; p++) {
+        for (var p = 0; p < freeMatrix[0].length; p++) {
             value += freeMatrix[o][p];
         }
         finalMatrix.push(value);
     }
-    
+
     // Multiply all to integers.
     var mul = 1;
     var testMul = 1;
-    
-    for(var g = 0; g < finalMatrix.length; g++) {
+
+    for (var g = 0; g < finalMatrix.length; g++) {
         var testInt = finalMatrix[g] * testMul;
-        while(testInt != parseInt(testInt)) {
+        while (testInt != parseInt(testInt)) {
             testMul += 1;
             testInt = finalMatrix[g] * testMul;
         }
-        if(testMul < mul) {
+        if (testMul < mul) {
             mul = testMul;
         }
     }
-    
-    for(var h = 0; h < finalMatrix.length; h++) {
+
+    for (var h = 0; h < finalMatrix.length; h++) {
         finalMatrix[h] *= testMul;
     }
 
     // Get GCD.
     var gcd;
-    
-    for(var u = 0; u < finalMatrix.length-1; u++) {
-        gcd = getGCD(finalMatrix[u], finalMatrix[u+1]); 
+
+    for (var u = 0; u < finalMatrix.length - 1; u++) {
+        gcd = getGCD(finalMatrix[u], finalMatrix[u + 1]);
 
     }
 
     // Get final answers.
-    for(var w = 0; w < finalMatrix.length; w++) {
+    for (var w = 0; w < finalMatrix.length; w++) {
         finalMatrix[w] /= gcd;
         finalMatrix[w] = Math.abs(finalMatrix[w]);
-        if(finalMatrix[w] != 1) {
-            finalMatrix[w] += compounds[w][0]; 
+        if (finalMatrix[w] != 1) {
+            finalMatrix[w] += compounds[w][0];
         } else {
             finalMatrix[w] = compounds[w][0];
         }
@@ -387,7 +372,7 @@ function balanceEquation(reactant, product) {
     return finalMatrix;
 }
 
-function getGCD(a,b) {
-    if(!b) return a;
+function getGCD(a, b) {
+    if (!b) return a;
     return getGCD(b, a % b);
 }

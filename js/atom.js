@@ -178,7 +178,7 @@ function tableDesc() {
 }
 
 function changeText(dom, text) {
-    var dom = get(dom);
+    dom = get(dom);
     // Remove all childs in div
     while (dom.firstChild) {
         dom.removeChild(dom.firstChild);
