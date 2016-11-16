@@ -1,132 +1,175 @@
 <html>
-	<head>
-		<meta charset="utf-8">
-	    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-	    <title>Atoms</title>
-	    <link rel="icon" href="./resources/static/favicon.ico">
-	    <link rel="stylesheet" href="./index.css">
-	    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-	    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	</head>	
-	<body>
-		<div class="pulltab first"><p class="tDesc">Elements</p></div>
-		<div class="sidebar elements">
-			<i class="fa fa-close"></i>
-			<div class="titleholder"></div>
-			<div class="key">
-				<div class="legendholder"></div>
-			</div>
-		</div>
-		
-		<div class="pulltab second"><p class="tDesc">Tools</p></div>
-		<div class="sidebar tools">
-			<i class="fa fa-close"></i>
-			<form>
-				Reactants:
-				<input type="text" class="reactant">
-				Products:
-				<input type="test" class="product">
-			</form>
-			<p id="balancebutton">Balance!</p>
-			<div class="balanceholder"><input type="text" class="balanceout" readonly></div>
-		</div>
-		
-		<div class="pulltab third"><p class="tDesc">Settings</p></div>
-		<div class="sidebar settings">
-			<i class="fa fa-close"></i>
-			<div class="setting">
-				<div class="help">?</div>
-				<div class="helptab"></div>
-				<div class="helptext">Change the color scheme</div>
-				<p class="desc">Background Theme:</p>
-				<div class=option id="theme"></div>
-			</div>
-			<div class="setting">
-				<div class="help">?</div>
-				<div class="helptab"></div>
-				<div class="helptext">Change the colors of the Periodic Table and the Atoms</div>
-				<p class="desc">Display Theme:</p>
-				<div class=option id="displayTheme"></div>
-			</div>
-			<div class="setting">
-				<div class="help">?</div>
-				<div class="helptab"></div>
-				<div class="helptext">Change the style of electron configuration</div>
-				<p class="desc">Electron Configuration:</p>
-				<div class=option id="elecConf"></div>
-			</div>
-			<div class="setting">
-				<div class="help">?</div>
-				<div class="helptab"></div>
-				<div class="helptext">Change the units for temperature</div>
-				<p class="desc">Units:</p>
-				<div class=option id="unit"></div>
-			</div>
-			<div class='about'>
-				<p>Developed by Kenneth Jao and Yaman Qalieh</p>
-				<a class="github" target="_blank" href="https://github.com/ksjdragon/atoms">Github</a>
-			</div>
-		</div>
 
-		<div class="workspace"></div>
-	</body>
-	<script type='text/javascript'> 
-		var settings = {}; //settings[theme] will return the current setting
-		var info; // JSON file
-		var options = ["theme","displayTheme","elecConf","unit"]; 
-		var ranges = {}; //ranges[theme][0] is min [1] is max [2] is range
-		var elementCount = 118; // Number of elements
-		var lastElement;
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Atoms</title>
+    <link rel="icon" href="./resources/static/favicon.ico">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
 
-		var choices = [ //Keep these in the same order as options
-			["light","dark"],
-			["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting", "boiling"],
-			["abr","norm"],
-			["K","C","F"]
-		];
+<body>
+    <div class="pulltab first">
+        <p class="tDesc">Elements</p>
+    </div>
+    <div class="sidebar elements">
+        <i class="fa fa-close"></i>
+        <div class="titleholder"></div>
+        <div class="key">
+            <div class="legendholder"></div>
+        </div>
+    </div>
 
-		var choicesDisplay = [ // Keep these in the same order as options
-			["Light","Dark"],
-			["Region", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
-			["Abbreviated","Full"],
-			["Kelvin","Celsius","Fahrenheit"]
-		];
+    <div class="pulltab second">
+        <p class="tDesc">Tools</p>
+    </div>
+    <div class="sidebar tools">
+        <i class="fa fa-close"></i>
+        <form>
+            Reactants:
+            <input type="text" class="reactant"> Products:
+            <input type="test" class="product">
+        </form>
+        <p id="balancebutton">Balance!</p>
+        <div class="balanceholder"><input type="text" class="balanceout" readonly></div>
+    </div>
 
-		var keyColors = [
-			{"Alkali Metals":'#8EF02B',"Alkali Earth Metals":"#D77A1D","Metalloids":"#387290","Non-metals":"#52BFF6","Halogens":"#4842E9","Noble Gases":"#7B1AE9","Transition Metals":"#E5D439","Post Transition Metals":"#2ADEA8","Lanthanides":"#F02BBC","Actinides":"#D78A8A"},
-			{"Unknown": "#41464d"},
-			{},
-			{"Unknown": "#41464d"},
-			{"Unknown": "#41464d"},
-			{"Unknown": "#41464d"},
-			{"Unknown": "#41464d"},
-			{"Unknown": "#41464d"},
-			{"Unknown": "#41464d"}
-		];
+    <div class="pulltab third">
+        <p class="tDesc">Settings</p>
+    </div>
+    <div class="sidebar settings">
+        <i class="fa fa-close"></i>
+        <div class="setting">
+            <div class="help">?</div>
+            <div class="helptab"></div>
+            <div class="helptext">Change the color scheme</div>
+            <p class="desc">Background Theme:</p>
+            <div class=option id="theme"></div>
+        </div>
+        <div class="setting">
+            <div class="help">?</div>
+            <div class="helptab"></div>
+            <div class="helptext">Change the colors of the Periodic Table and the Atoms</div>
+            <p class="desc">Display Theme:</p>
+            <div class=option id="displayTheme"></div>
+        </div>
+        <div class="setting">
+            <div class="help">?</div>
+            <div class="helptab"></div>
+            <div class="helptext">Change the style of electron configuration</div>
+            <p class="desc">Electron Configuration:</p>
+            <div class=option id="elecConf"></div>
+        </div>
+        <div class="setting">
+            <div class="help">?</div>
+            <div class="helptab"></div>
+            <div class="helptext">Change the units for temperature</div>
+            <p class="desc">Units:</p>
+            <div class=option id="unit"></div>
+        </div>
+        <div class='about'>
+            <p>Developed by Kenneth Jao and Yaman Qalieh</p>
+            <a class="github" target="_blank" href="https://github.com/ksjdragon/atoms">Github</a>
+        </div>
+    </div>
 
-		var colorChart = { //colorChart[theme][0] = most [1] = least
-			"category": {"al":'#8EF02B',"ae":"#D77A1D","md":"#387290","nm":"#52BFF6","ha":"#4842E9","ng":"#7B1AE9","tm":"#E5D439","bm":"#2ADEA8","lh":"#F02BBC","ac":"#D78A8A"},
-			"atomRadi": ["#151618", "#2C7BF2"],
-			"moleWeig": ["#151618", "#2C7BF2"],
-			"ioniEner": ["#E2DC27", "#5535D4"],
-			"elecAffi": ["#E2DC27", "#5535D4"],
-			"elecNega": ["#E2DC27","#5535D4"],
-			"density": ["#151618", "#2C7BF2"],
-			"melting": ["#D7301E", "#69F2F2"],
-			"boiling": ["#D7301E", "#69F2F2"]		
-		};
+    <div class="workspace"></div>
+</body>
+<script type='text/javascript'>
+    var settings = {}; //settings[theme] will return the current setting
+    var info; // JSON file
+    var options = ["theme", "displayTheme", "elecConf", "unit"];
+    var ranges = {}; //ranges[theme][0] is min [1] is max [2] is range
+    var elementCount = 118; // Number of elements
+    var lastElement;
 
-		var themeChart = { //themeChart[element][theme]
-		"pulltab": {'light': '#B3DAFF','dark': '#779550'},
-		"sidebar": {'light':'#E6F5FF','dark': '#7b925d'},
-		"font": {'light': 'rgb(0,0,0)', 'dark': 'rgb(254,254,254)'}
-		};
-	</script>
+    var choices = [ //Keep these in the same order as options
+        ["light", "dark"],
+        ["category", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "density", "melting", "boiling"],
+        ["abr", "norm"],
+        ["K", "C", "F"]
+    ];
 
-	<script src="./js/tools.js"></script>
-	<script src="./js/onload.js"></script>
-	<script src="./js/update.js"></script>
-	<script src="./js/atom.js"></script>
-	<script src="./js/buttons.js"></script>
-	<script src="./js/main.js"></script>
+    var choicesDisplay = [ // Keep these in the same order as options
+        ["Light", "Dark"],
+        ["Region", "Atomic Radius", "Molecular Mass", "Ionization Energy", "Electron Affinity", "Electronegativity", "Density", "Melting Point", "Boiling Point"],
+        ["Abbreviated", "Full"],
+        ["Kelvin", "Celsius", "Fahrenheit"]
+    ];
+
+    var keyColors = [{
+        "Alkali Metals": '#8EF02B',
+        "Alkali Earth Metals": "#D77A1D",
+        "Metalloids": "#387290",
+        "Non-metals": "#52BFF6",
+        "Halogens": "#4842E9",
+        "Noble Gases": "#7B1AE9",
+        "Transition Metals": "#E5D439",
+        "Post Transition Metals": "#2ADEA8",
+        "Lanthanides": "#F02BBC",
+        "Actinides": "#D78A8A"
+    }, {
+        "Unknown": "#41464d"
+    }, {}, {
+        "Unknown": "#41464d"
+    }, {
+        "Unknown": "#41464d"
+    }, {
+        "Unknown": "#41464d"
+    }, {
+        "Unknown": "#41464d"
+    }, {
+        "Unknown": "#41464d"
+    }, {
+        "Unknown": "#41464d"
+    }];
+
+    var colorChart = { //colorChart[theme][0] = most [1] = least
+        "category": {
+            "al": '#8EF02B',
+            "ae": "#D77A1D",
+            "md": "#387290",
+            "nm": "#52BFF6",
+            "ha": "#4842E9",
+            "ng": "#7B1AE9",
+            "tm": "#E5D439",
+            "bm": "#2ADEA8",
+            "lh": "#F02BBC",
+            "ac": "#D78A8A"
+        },
+        "atomRadi": ["#151618", "#2C7BF2"],
+        "moleWeig": ["#151618", "#2C7BF2"],
+        "ioniEner": ["#E2DC27", "#5535D4"],
+        "elecAffi": ["#E2DC27", "#5535D4"],
+        "elecNega": ["#E2DC27", "#5535D4"],
+        "density": ["#151618", "#2C7BF2"],
+        "melting": ["#D7301E", "#69F2F2"],
+        "boiling": ["#D7301E", "#69F2F2"]
+    };
+
+    var themeChart = { //themeChart[element][theme]
+        "pulltab": {
+            'light': '#B3DAFF',
+            'dark': '#779550'
+        },
+        "sidebar": {
+            'light': '#E6F5FF',
+            'dark': '#7b925d'
+        },
+        "font": {
+            'light': 'rgb(0,0,0)',
+            'dark': 'rgb(254,254,254)'
+        }
+    };
+</script>
+
+<script src="./js/tools.js"></script>
+<script src="./js/onload.js"></script>
+<script src="./js/update.js"></script>
+<script src="./js/atom.js"></script>
+<script src="./js/buttons.js"></script>
+<script src="./js/main.js"></script>
+
 </html>
