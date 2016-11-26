@@ -1,6 +1,6 @@
-get("pulltab")[0].onclick = function(){open(get("elements"));}
-get("pulltab")[1].onclick = function(){open(get("tools"));}
-get("pulltab")[2].onclick = function(){open(get("settings"));}
+get("pulltab")[0].onclick = function(){open(get("elements"));};
+get("pulltab")[1].onclick = function(){open(get("tools"));};
+get("pulltab")[2].onclick = function(){open(get("settings"));};
 get("fa")[0].onclick = function() {
 	get("elements").style.marginLeft = "-150%";
 }

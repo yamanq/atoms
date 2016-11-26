@@ -60,12 +60,12 @@ function tableDesc() {
             var index = parseInt(this.childNodes[0].childNodes[0].nodeValue - 1);
             for (var i = 0; i < p.length; i++) { // Loop through all data types to be displayed
                 if (i == 8 || i == 9) { // If data type is melting or boiling
-                    if (info[p[i]][settings.unit].index !== null) {
+                    if (info[p[i]][index] !== null) {
                         // Get prefix ex. Melting: + actual value + unit
                         if (settings.unit != "K") {
-                            changeText(p[i], prefix[i] + info[p[i]][settings.unit][index] + "° " + settings.unit);
+                            changeText(p[i], prefix[i] + convertUnit(info[p[i]][index], settings.unit) + "° " + settings.unit);
                         } else {
-                            changeText(p[i], prefix[i] + info[p[i]][settings.unit][index] + " " + settings.unit);
+                            changeText(p[i], prefix[i] +  convertUnit(info[p[i]][index], settings.unit) + " " + settings.unit);
                         }
                     } else { // If null
                         changeText(p[i], prefix[i] + "Unknown"); // Make unknown

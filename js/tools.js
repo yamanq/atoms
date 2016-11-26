@@ -18,9 +18,9 @@ function getColor(theme, atomNum) {
 
 function convertUnit(Kval, unit) {
     if (unit === "C") {
-        return Kval - 273.15;
+        return +(Kval - 273.15).toFixed(2);
     } else if (unit === "F") {
-        return (1.8 * Kval) - 459.67;
+        return +((1.8 * Kval) - 459.67).toFixed(2);
     } else {
         return Kval;
     }
@@ -90,11 +90,14 @@ function get(name) {
     classname = document.getElementsByClassName(name);
     tagname = document.getElementsByTagName(name);
     idname = document.getElementById(name);
-    if (classname.length > 0) elements = classname;
+    if (classname.length > 0) elements = elements.concat(classname);
     else if (tagname.length > 0) elements = elements.concat(tagname);
     else if (idname !== null)elements.push(document.getElementById(name));
 
-    if (elements.length == 1) {
+    elements = elements[0];
+    if (elements === undefined) {
+        return [];
+    } else if (elements.length == 1) {
         return elements[0];
     } else {
         return elements;
@@ -115,10 +118,10 @@ function getRanges() {
     // Format of ranges is [Min, Max, Range]
     for (var i = 1; i < choices[1].length; i++) { // Possible data types are options except for category
         var option = choices[1][i];
-            var min = Math.min.apply(null, info[option]);
-            var max = Math.max.apply(null, info[option]);
-            var range = max - min;
-            ranges[option] = [min, max, range];
+        var min = Math.min.apply(null, info[option]);
+        var max = Math.max.apply(null, info[option]);
+        var range = max - min;
+        ranges[option] = [min, max, range];
     }
 }
 
