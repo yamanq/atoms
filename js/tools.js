@@ -1,3 +1,10 @@
+
+
+function createAtom(index) {
+    //TODO
+    return;
+}
+
 function getColor(theme, atomNum) {
     var color;
     var ratio;
