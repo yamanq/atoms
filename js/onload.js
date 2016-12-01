@@ -107,23 +107,26 @@ function createGradientLegend() {
     var max = document.createElement("p");
     max.className = "legendrangeval maxlegend";
 
+    var minval;
+    var maxval;
     if (colorChart[theme].length != 2) {
-        var minval = document.createTextNode("");
-        var maxval = document.createTextNode("");
+        minval = document.createTextNode("");
+        maxval = document.createTextNode("");
 
     } else if (theme === "melting" || theme === "boiling") {
+        var extra;
         if (unit === "K") {
-            var extra = " " + unit;
+            extra = " " + unit;
         } else {
-            var extra = " °" + unit;
+            extra = " °" + unit;
         }
-        var minval = document.createTextNode(convertUnit(ranges[theme][0], unit) + extra);
-        var maxval = document.createTextNode(convertUnit(ranges[theme][1], unit) + extra);
+        minval = document.createTextNode(convertUnit(ranges[theme][0], unit) + extra);
+        maxval = document.createTextNode(convertUnit(ranges[theme][1], unit) + extra);
 
 
     } else {
-        var minval = document.createTextNode(ranges[theme][0] + " " + units[index]);
-        var maxval = document.createTextNode(ranges[theme][1] + " " + units[index]);
+        minval = document.createTextNode(ranges[theme][0] + " " + units[index]);
+        maxval = document.createTextNode(ranges[theme][1] + " " + units[index]);
 
     }
     min.appendChild(minval);
@@ -151,7 +154,7 @@ function makeSettings() {
     for (var i = 0; i < options.length; i++) {
         var parent = get("option")[i];
         var text = document.createElement("p");
-        // Create text of current settings choice for this option 
+        // Create text of current settings choice for this option
         text.appendChild(document.createTextNode(choicesDisplay[i][choices[i].indexOf(settings[parent.id])]));
         text.className = "selection";
 
@@ -169,7 +172,7 @@ function makeSettings() {
             setTimeout(function() {
                 k.childNodes[1].style.opacity = "1";
             }, 1);
-        }
+        };
         parent.onmouseleave = function() {
             // Make invisible
             var k = this;
@@ -177,7 +180,7 @@ function makeSettings() {
             setTimeout(function() {
                 k.childNodes[1].display = "none";
             }, 300); //Time for opacity change
-        }
+        };
         holder.onmouseleave = function() {
             // Make invisible
             var k = this;
@@ -185,12 +188,12 @@ function makeSettings() {
             setTimeout(function() {
                 k.style.display = "none";
             }, 300); //Time for opacity change
-        }
+        };
 
         for (var j = 0; j < choices[i].length; j++) { // For all choices, append div for choice selection
             var p = document.createElement("p");
             p.className = i.toString() + j.toString();
-            p.appendChild(document.createTextNode(choicesDisplay[i][j]))
+            p.appendChild(document.createTextNode(choicesDisplay[i][j]));
             holder.appendChild(p);
 
             p.onclick = function(event) {
@@ -206,19 +209,19 @@ function makeSettings() {
                         k.parentNode.style.display = "none";
                     }, 300);
                     // Text transition: opacity 0
-                    textDiv.parentNode.style.color = themeChart["font"][settings["theme"]].replace(")", ",0)").replace("b", "ba");
+                    textDiv.parentNode.style.color = themeChart["font"][settings.theme].replace(")", ",0)").replace("b", "ba");
                     // Update settings through cookie
                     deleteCookie(setting);
                     document.cookie = setting + "=" + choices[parseInt(this.className[0])][parseInt(this.className[1])];
                     // Text transition: opacity 1
                     setTimeout(function() {
                         textDiv.nodeValue = value;
-                        textDiv.parentNode.style.color = themeChart["font"][settings["theme"]].replace(")", ",1)").replace("b", "ba");
+                        textDiv.parentNode.style.color = themeChart["font"][settings.theme].replace(")", ",1)").replace("b", "ba");
                         update();
-                    }, 650)
+                    }, 650);
 
                 }
-            }
+            };
         }
     }
 }

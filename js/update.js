@@ -5,15 +5,15 @@ function changeTheme(type) {
     // Changes interface element colors
     var i;
     for (i = 0; i < get("pulltab").length; i++) {
-        get("pulltab")[i].style.backgroundColor = themeChart.pulltab.type;
-        get("pulltab")[i].style.color = themeChart["font"][type].replace(")", ",0)");
+        get("pulltab")[i].style.backgroundColor = themeChart.pulltab[type];
+        get("pulltab")[i].style.color = themeChart.font[type].replace(")", ",0)");
         get("pulltab")[i].onmouseover = function() {
-            this.style.color = themeChart["font"][type].replace(")", ",1)").replace("b", "ba");
+            this.style.color = themeChart.font[type].replace(")", ",1)").replace("b", "ba");
         };
         get("pulltab")[i].onmouseleave = function() {
             this.style.color = themeChart.font[type].replace(")", ",0)").replace("b", "ba");
         };
-        get("sidebar")[i].style.backgroundColor = themeChart.sidebar.type;
+        get("sidebar")[i].style.backgroundColor = themeChart.sidebar[type];
     }
 
     for (i = 0; i < get("selection").length; i++) {
@@ -105,9 +105,7 @@ function legendChange(theme) {
         var color1 = colorChart[theme][0];
         var color2 = colorChart[theme][1];
 
-        console.log(theme);
         if (theme === "melting" || theme === "boiling") {
-            console.log("hello");
             var unit = settings.unit;
             newmin = ranges[theme][0];
             newmax = ranges[theme][1];

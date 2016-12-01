@@ -1,3 +1,13 @@
+var sidestage;
+var sidegraphics;
+var siderenderer;
+var electrongraphics;
+var eyegraphics;
+var electronText;
+var electroncount = 0;
+var numEl;
+
+
 function tableDesc() {
     var p = ["element", "atomRadi", "moleWeig", "ioniEner", "elecAffi", "elecNega", "phase", "density", "melting", "boiling",
         "oxidStat", "elecConf"
@@ -171,9 +181,71 @@ function tableDesc() {
             try {
                 get("preview").removeChild(get("preview").firstChild);
             } catch (err) {}
-            get("preview").appendChild(getAtomDOM(index, window.innerHeight / 3.8));
+            // get("preview").appendChild(getAtomDOM(index, window.innerHeight / 3.8));
 
+
+            if (siderenderer) {
+                sidegraphics.clear();
+                eyegraphics.clear();
+                electrongraphics.clear();
+            } else {
+                siderenderer = PIXI.autoDetectRenderer(300, 280, {transparent: true, antialias: true});
+                sidestage = new PIXI.Container();
+                sidegraphics = new PIXI.Graphics();
+
+                electrongraphics = new PIXI.Graphics();
+                electrongraphics.position.x = 150;
+                electrongraphics.position.y = 140;
+
+                eyegraphics = new PIXI.Graphics();
+                eyegraphics.position.x = 150;
+                eyegraphics.position.y = 140;
+
+                electronText = new PIXI.Text("", {font: "300% Oswald"});
+                electronText.position.x = 140;
+                electronText.position.y = 10;
+
+                sidestage.addChild(sidegraphics);
+                sidestage.addChild(electrongraphics);
+                sidestage.addChild(eyegraphics);
+                sidestage.addChild(electronText);
+            }
+            get("preview").appendChild(siderenderer.view);
+            var bgColor = getColor(settings.displayTheme, index);
+            electronText.text = info.shorthand[index];
+            sidegraphics.beginFill("0x" + bgColor.substring(1));
+            sidegraphics.lineStyle(10, "0x" + changeColor(bgColor, 20).substring(1), 1);
+            sidegraphics.drawCircle(150, 140, 90);
+
+            eyegraphics.beginFill("0x" + changeColor(bgColor, -20).substring(1));
+            eyegraphics.lineStyle(3, "0xffffff");
+            eyegraphics.drawEllipse(15, -12, 8, 20);
+            eyegraphics.drawEllipse(-15, -12, 8, 20);
+
+            electrongraphics.beginFill(0xffffff);
+            numEl = info.valeElec[index];
+            for(var elnum = 0; elnum < numEl; elnum++) {
+                electrongraphics.drawCircle(110 * Math.cos((2 * Math.PI * elnum) / numEl),
+                                            110 * Math.sin((2 * Math.PI * elnum) / numEl),
+                                            13);
+            }
+
+
+            animate(false);
         };
+    }
+}
+
+function animate(pass) {
+    if (pass || electroncount === 0) {
+        pass = true;
+    }
+    electrongraphics.rotation = electroncount;
+    electroncount += 0.05;
+    eyegraphics.position.y = 140 + 5 * Math.sin(electroncount * 0.5);
+    siderenderer.render(sidestage);
+    if (pass) {
+        requestAnimationFrame(animate);
     }
 }
 
@@ -188,87 +260,88 @@ function changeText(dom, text) {
     dom.childNodes[0].nodeValue = text;
 }
 
-function getAtomDOM(atomNum, size) {
-    var holder = document.createElement("div");
-    holder.style.position = "relative";
-    holder.style.height = size;
-    holder.style.width = size;
-    holder.className = "realAtom";
+// function getAtomDOM(atomNum, size) {
+//     var holder = document.createElement("div");
+//     holder.style.position = "relative";
+//     holder.style.height = size;
+//     holder.style.width = size;
+//     holder.className = "realAtom";
 
-    var atom = document.createElement("img");
-    atom.ondragstart = function() {
-        return false;
-    }; // Disables image dragging
-    atom.src = "./resources/reactive/Ring" + info.valeElec[atomNum] + ".gif";
-    atom.style.height = size;
-    atom.style.width = size;
-    atom.style.position = "absolute";
-    atom.style.top = "0";
-    atom.style.left = "0";
+//     var atom = document.createElement("img");
+//     atom.ondragstart = function() {
+//         return false;
+//     }; // Disables image dragging
+//     atom.src = "./resources/reactive/Ring" + info.valeElec[atomNum] + ".gif";
+//     atom.style.height = size;
+//     atom.style.width = size;
+//     atom.style.position = "absolute";
+//     atom.style.top = "0";
+//     atom.style.left = "0";
 
-    var circle = document.createElement("div");
-    circle.className = "innerAtom";
-    circle.style.borderRadius = "50%"; // Creates circle
-    circle.style.height = size * 0.85;
-    circle.style.width = size * 0.85;
-    circle.style.margin = "0 auto";
-    circle.style.position = "absolute";
-    circle.style.top = size * 0.075;
-    circle.style.left = size * 0.075;
-    var bgColor = getColor(settings.displayTheme, atomNum);
-    circle.style.backgroundColor = bgColor;
-    circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor, 20) + ", inset 0 0 10px 30px " + changeColor(bgColor, -20) + ", 1px 4px 16px 6px #444";
+//     var circle = document.createElement("div");
+//     circle.className = "innerAtom";
+//     circle.style.borderRadius = "50%"; // Creates circle
+//     circle.style.height = size * 0.85;
+//     circle.style.width = size * 0.85;
+//     circle.style.margin = "0 auto";
+//     circle.style.position = "absolute";
+//     circle.style.top = size * 0.075;
+//     circle.style.left = size * 0.075;
+//     var bgColor = getColor(settings.displayTheme, atomNum);
+//     console.log(bgColor);
+//     circle.style.backgroundColor = bgColor;
+//     circle.style.boxShadow = "inset 0 0 0 15px " + changeColor(bgColor, 20) + ", inset 0 0 10px 30px " + changeColor(bgColor, -20) + ", 1px 4px 16px 6px #444";
 
-    var eyes = document.createElement("div");
-    eyes.style.display = "flex";
-    eyes.style.position = "absolute";
-    var eyesWidth = size * 0.17;
-    var eyesHeight = size * 0.15;
-    eyes.style.top = size * 0.425 - eyesHeight / 2;
-    eyes.style.left = size * 0.67 - eyesWidth / 2;
-    var eye = document.createElement("div");
-    eye.style.backgroundColor = changeColor(bgColor, -20);
-    eye.style.borderRadius = "100px / 240px";
-    eye.style.boxShadow = "inset 0 0 0 4px #fff";
-    eye.style.width = size * 0.06;
-    eye.style.height = size * 0.15;
-    eye.className = "eye";
-    eyes.appendChild(eye);
-    var eye2 = eye.cloneNode(true);
-    eye2.style.marginLeft = "5px";
-    eyes.appendChild(eye2);
+//     var eyes = document.createElement("div");
+//     eyes.style.display = "flex";
+//     eyes.style.position = "absolute";
+//     var eyesWidth = size * 0.17;
+//     var eyesHeight = size * 0.15;
+//     eyes.style.top = size * 0.425 - eyesHeight / 2;
+//     eyes.style.left = size * 0.67 - eyesWidth / 2;
+//     var eye = document.createElement("div");
+//     eye.style.backgroundColor = changeColor(bgColor, -20);
+//     eye.style.borderRadius = "100px / 240px";
+//     eye.style.boxShadow = "inset 0 0 0 4px #fff";
+//     eye.style.width = size * 0.06;
+//     eye.style.height = size * 0.15;
+//     eye.className = "eye";
+//     eyes.appendChild(eye);
+//     var eye2 = eye.cloneNode(true);
+//     eye2.style.marginLeft = "5px";
+//     eyes.appendChild(eye2);
 
-    var sh = document.createElement("p");
-    sh.appendChild(document.createTextNode(info.shorthand[atomNum]));
-    sh.className = "sh";
+//     var sh = document.createElement("p");
+//     sh.appendChild(document.createTextNode(info.shorthand[atomNum]));
+//     sh.className = "sh";
 
-    circle.appendChild(sh);
-    circle.appendChild(eyes);
-    holder.appendChild(circle);
-    holder.appendChild(atom);
+//     circle.appendChild(sh);
+//     circle.appendChild(eyes);
+//     holder.appendChild(circle);
+//     holder.appendChild(atom);
 
-    return holder;
-}
+//     return holder;
+// }
 
-get("body").onmousemove = function(event) {
-    // Makes eyes point at mouse
-    try {
-        var a = event.clientX;
-        var b = event.clientY;
-        for (var i = 0; i < document.getElementsByClassName("innerAtom").length; i++) {
-            var atom = document.getElementsByClassName("innerAtom")[i];
-            var x = (atom.getBoundingClientRect().left + atom.getBoundingClientRect().right) / 2; // X coord
-            var y = (atom.getBoundingClientRect().top + atom.getBoundingClientRect().bottom) / 2; // Y coord
-            var width = atom.getBoundingClientRect().width; // Width and length are same because circle
+// get("body").onmousemove = function(event) {
+//     // Makes eyes point at mouse
+//     try {
+//         var a = event.clientX;
+//         var b = event.clientY;
+//         for (var i = 0; i < document.getElementsByClassName("innerAtom").length; i++) {
+//             var atom = document.getElementsByClassName("innerAtom")[i];
+//             var x = (atom.getBoundingClientRect().left + atom.getBoundingClientRect().right) / 2; // X coord
+//             var y = (atom.getBoundingClientRect().top + atom.getBoundingClientRect().bottom) / 2; // Y coord
+//             var width = atom.getBoundingClientRect().width; // Width and length are same because circle
 
-            var r = width / 4;
-            var vect = [a - x, b - y];
-            var magn = Math.sqrt(Math.pow(vect[0], 2) + Math.pow(vect[1], 2));
-            var eyePos = [vect[0] * r / magn, vect[1] * r / magn];
+//             var r = width / 4;
+//             var vect = [a - x, b - y];
+//             var magn = Math.sqrt(Math.pow(vect[0], 2) + Math.pow(vect[1], 2));
+//             var eyePos = [vect[0] * r / magn, vect[1] * r / magn];
 
-            var eyes = atom.childNodes[1];
-            eyes.style.left = width / 2 + eyePos[0] - eyes.getBoundingClientRect().width / 2;
-            eyes.style.top = width / 2 + eyePos[1] - eyes.getBoundingClientRect().height / 2;
-        }
-    } catch (err) {}
-};
+//             var eyes = atom.childNodes[1];
+//             eyes.style.left = width / 2 + eyePos[0] - eyes.getBoundingClientRect().width / 2;
+//             eyes.style.top = width / 2 + eyePos[1] - eyes.getBoundingClientRect().height / 2;
+//         }
+//     } catch (err) {}
+// };
