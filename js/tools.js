@@ -1,8 +1,137 @@
 
+atoms = [];
+
+renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {transparent: true, antialias: true});
+superstage = new PIXI.Container();
+
+get("body").appendChild(renderer.view);
+
+var count = 0;
+var pass = true;
+
+// Standard Normal variate using Box-Muller transform.
+function randn_bm(length) {
+    // Subtraction to flip [0, 1) to (0, 1].
+    var u = 1 - Math.random();
+    var v = 1 - Math.random();
+    length = length / 2;
+    var done = length + (length/5) * Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    if (done < 0 || done > (length * 2)) {
+        return randn_bm(2 * length);
+    } else {
+        return done;
+    }
+}
 
 function createAtom(index) {
     //TODO
-    return;
+    atoms.push({stage: undefined,
+                graphics: undefined,
+                electrongraphics: undefined,
+                electronText: undefined,
+                eyegraphics: undefined,
+                random: Math.random()});
+
+    currentatom = atoms[atoms.length - 1];
+    currentatom.stage = new PIXI.Container();
+    currentatom.stage.interactive = true;
+    currentatom.stage.buttonMode = true;
+    currentatom.stage.anchor = 0.5;
+    currentatom.stage
+    // events for drag start
+        .on('mousedown', onDragStart)
+        .on('touchstart', onDragStart)
+    // events for drag end
+        .on('mouseup', onDragEnd)
+        .on('mouseupoutside', onDragEnd)
+        .on('touchend', onDragEnd)
+        .on('touchendoutside', onDragEnd)
+    // events for drag move
+        .on('mousemove', onDragMove)
+        .on('touchmove', onDragMove);
+
+    currentatom.graphics = new PIXI.Graphics();
+
+    var xcenter = randn_bm(window.innerWidth);
+    var ycenter = randn_bm(window.innerHeight);
+
+    currentatom.stage.position.x = xcenter;
+    currentatom.stage.position.y = ycenter;
+
+    currentatom.electrongraphics = new PIXI.Graphics();
+
+    currentatom.eyegraphics = new PIXI.Graphics();
+
+    currentatom.electronText = new PIXI.Text("", {font: "300% Oswald"});
+    currentatom.electronText.position.x = -10;
+    currentatom.electronText.position.y = -130;
+
+    currentatom.stage.addChild(currentatom.graphics);
+    currentatom.stage.addChild(currentatom.electrongraphics);
+    currentatom.stage.addChild(currentatom.eyegraphics);
+    currentatom.stage.addChild(currentatom.electronText);
+
+    var bgColor = getColor(settings.displayTheme, index);
+    currentatom.electronText.text = info.shorthand[index];
+    currentatom.graphics.beginFill("0x" + bgColor.substring(1));
+    currentatom.graphics.lineStyle(10, "0x" + changeColor(bgColor, 20).substring(1), 1);
+    currentatom.graphics.drawCircle(0, 0, 90);
+
+    currentatom.eyegraphics.beginFill("0x" + changeColor(bgColor, -20).substring(1));
+    currentatom.eyegraphics.lineStyle(3, "0xffffff");
+    currentatom.eyegraphics.drawEllipse(15, -12, 8, 20);
+    currentatom.eyegraphics.drawEllipse(-15, -12, 8, 20);
+
+    currentatom.electrongraphics.beginFill(0xffffff);
+    var numEl = info.valeElec[index];
+    for(var elnum = 0; elnum < numEl; elnum++) {
+        currentatom.electrongraphics.drawCircle(110 * Math.cos((2 * Math.PI * elnum) / numEl),
+                                    110 * Math.sin((2 * Math.PI * elnum) / numEl),
+                                    13);
+    }
+    superstage.addChild(currentatom.stage);
+
+    if (pass) mainAnimate();
+    return true;
+}
+
+function mainAnimate() {
+    pass = false;
+    for(var i = 0; i < atoms.length; i++) {
+        var currentatom = atoms[i];
+        currentatom.electrongraphics.rotation = count + currentatom.random;
+        currentatom.eyegraphics.position.y = currentatom.electrongraphics.position.y + 5 * Math.sin(count * 0.5);
+    }
+    count += 0.05;
+    renderer.render(superstage);
+    requestAnimationFrame(mainAnimate);
+}
+
+function onDragStart(event) {
+    // store a reference to the data
+    // the reason for this is because of multitouch
+    // we want to track the movement of this particular touch
+    this.data = event.data;
+    this.alpha = 0.75;
+    this.dragging = true;
+}
+
+function onDragEnd() {
+    this.alpha = 1;
+
+    this.dragging = false;
+
+    // set the interaction data to null
+    this.data = null;
+}
+
+function onDragMove() {
+    if (this.dragging)
+    {
+        var newPosition = this.data.getLocalPosition(this.parent);
+        this.position.x = newPosition.x;
+        this.position.y = newPosition.y;
+    }
 }
 
 function getColor(theme, atomNum) {

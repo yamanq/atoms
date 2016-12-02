@@ -81,7 +81,7 @@ function tableDesc() {
                         changeText(p[i], prefix[i] + "Unknown"); // Make unknown
                     }
                 } else {
-                    if (info[p[i]][index] != null) { // If data type value isn't null
+                    if (info[p[i]][index] !== null) { // If data type value isn't null
                         if (i == 6) { // If data type is phase/state
                             // Get prefix + value reference ex. 'g' -> 'Gas' + unit
                             changeText(p[i], prefix[i] + states[info[p[i]][index]] + unit[i]);
@@ -242,7 +242,7 @@ function animate(pass) {
     }
     electrongraphics.rotation = electroncount;
     electroncount += 0.05;
-    eyegraphics.position.y = 140 + 5 * Math.sin(electroncount * 0.5);
+    eyegraphics.position.y = 140 + 2 * Math.sin(electroncount * 0.5);
     siderenderer.render(sidestage);
     if (pass) {
         requestAnimationFrame(animate);
