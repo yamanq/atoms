@@ -19,6 +19,22 @@ function changeTheme(type) {
     for (i = 0; i < get("selection").length; i++) {
         get("selection")[i].style.color = themeChart.font[type];
     }
+
+    for(var x = 0; x < atoms.length; x++) {
+        var currentatom = atoms[x];
+        var bgColor = getColor(settings.displayTheme, currentatom.general.index);
+
+        currentatom.graphics.clear();
+        currentatom.graphics.beginFill("0x" + bgColor.substring(1));
+        currentatom.graphics.lineStyle(10, "0x" + changeColor(bgColor, 20).substring(1), 1);
+        currentatom.graphics.drawCircle(0, 0, 90);
+
+        currentatom.eyegraphics.clear();
+        currentatom.eyegraphics.beginFill("0x" + changeColor(bgColor, -20).substring(1));
+        currentatom.eyegraphics.lineStyle(3, "0xffffff");
+        currentatom.eyegraphics.drawEllipse(15, -12, 8, 20);
+        currentatom.eyegraphics.drawEllipse(-15, -12, 8, 20);
+    }
 }
 
 function tableTheme(theme) {

@@ -30,7 +30,8 @@ function createAtom(index) {
                 electrongraphics: undefined,
                 electronText: undefined,
                 eyegraphics: undefined,
-                random: Math.random()});
+                random: Math.random(),
+                general: {index: index}});
 
     currentatom = atoms[atoms.length - 1];
     currentatom.stage = new PIXI.Container();
@@ -99,6 +100,7 @@ function mainAnimate() {
     pass = false;
     for(var i = 0; i < atoms.length; i++) {
         var currentatom = atoms[i];
+
         currentatom.electrongraphics.rotation = count + currentatom.random;
         currentatom.eyegraphics.position.y = currentatom.electrongraphics.position.y + 5 * Math.sin(count * 0.5);
     }
