@@ -1,7 +1,9 @@
-
 atoms = [];
 
-renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {transparent: true, antialias: true});
+renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+    transparent: true,
+    antialias: true
+});
 superstage = new PIXI.Container();
 
 get("body").appendChild(renderer.view);
@@ -15,7 +17,7 @@ function randn_bm(length) {
     var u = 1 - Math.random();
     var v = 1 - Math.random();
     length = length / 2;
-    var done = length + (length/5) * Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    var done = length + (length / 5) * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     if (done < 0 || done > (length * 2)) {
         return randn_bm(2 * length);
     } else {
@@ -24,14 +26,17 @@ function randn_bm(length) {
 }
 
 function createAtom(index) {
-    //TODO
-    atoms.push({stage: undefined,
-                graphics: undefined,
-                electrongraphics: undefined,
-                electronText: undefined,
-                eyegraphics: undefined,
-                random: Math.random(),
-                general: {index: index}});
+    atoms.push({
+        stage: undefined,
+        graphics: undefined,
+        electrongraphics: undefined,
+        electronText: undefined,
+        eyegraphics: undefined,
+        general: {
+            index: index,
+            random: 5 * Math.random()
+        }
+    });
 
     currentatom = atoms[atoms.length - 1];
     currentatom.stage = new PIXI.Container();
@@ -39,15 +44,12 @@ function createAtom(index) {
     currentatom.stage.buttonMode = true;
     currentatom.stage.anchor = 0.5;
     currentatom.stage
-    // events for drag start
         .on('mousedown', onDragStart)
         .on('touchstart', onDragStart)
-    // events for drag end
         .on('mouseup', onDragEnd)
         .on('mouseupoutside', onDragEnd)
         .on('touchend', onDragEnd)
         .on('touchendoutside', onDragEnd)
-    // events for drag move
         .on('mousemove', onDragMove)
         .on('touchmove', onDragMove);
 
@@ -60,10 +62,10 @@ function createAtom(index) {
     currentatom.stage.position.y = ycenter;
 
     currentatom.electrongraphics = new PIXI.Graphics();
-
     currentatom.eyegraphics = new PIXI.Graphics();
-
-    currentatom.electronText = new PIXI.Text("", {font: "300% Oswald"});
+    currentatom.electronText = new PIXI.Text("", {
+        font: "300% Oswald"
+    });
     currentatom.electronText.position.x = -10;
     currentatom.electronText.position.y = -130;
 
@@ -85,10 +87,10 @@ function createAtom(index) {
 
     currentatom.electrongraphics.beginFill(0xffffff);
     var numEl = info.valeElec[index];
-    for(var elnum = 0; elnum < numEl; elnum++) {
+    for (var elnum = 0; elnum < numEl; elnum++) {
         currentatom.electrongraphics.drawCircle(110 * Math.cos((2 * Math.PI * elnum) / numEl),
-                                    110 * Math.sin((2 * Math.PI * elnum) / numEl),
-                                    13);
+            110 * Math.sin((2 * Math.PI * elnum) / numEl),
+            13);
     }
     superstage.addChild(currentatom.stage);
 
@@ -98,10 +100,10 @@ function createAtom(index) {
 
 function mainAnimate() {
     pass = false;
-    for(var i = 0; i < atoms.length; i++) {
+    for (var i = 0; i < atoms.length; i++) {
         var currentatom = atoms[i];
 
-        currentatom.electrongraphics.rotation = count + currentatom.random;
+        currentatom.electrongraphics.rotation = count + currentatom.general.random;
         currentatom.eyegraphics.position.y = currentatom.electrongraphics.position.y + 5 * Math.sin(count * 0.5);
     }
     count += 0.05;
@@ -128,8 +130,7 @@ function onDragEnd() {
 }
 
 function onDragMove() {
-    if (this.dragging)
-    {
+    if (this.dragging) {
         var newPosition = this.data.getLocalPosition(this.parent);
         this.position.x = newPosition.x;
         this.position.y = newPosition.y;
@@ -230,7 +231,7 @@ function get(name) {
     idname = document.getElementById(name);
     if (classname.length > 0) elements = elements.concat(classname);
     else if (tagname.length > 0) elements = elements.concat(tagname);
-    else if (idname !== null)elements.push(document.getElementById(name));
+    else if (idname !== null) elements.push(document.getElementById(name));
 
     elements = elements[0];
     if (elements === undefined) {

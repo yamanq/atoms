@@ -22,6 +22,8 @@ function changeTheme(type) {
 
     for(var x = 0; x < atoms.length; x++) {
         var currentatom = atoms[x];
+
+        // Redo Colors
         var bgColor = getColor(settings.displayTheme, currentatom.general.index);
 
         currentatom.graphics.clear();
@@ -34,6 +36,8 @@ function changeTheme(type) {
         currentatom.eyegraphics.lineStyle(3, "0xffffff");
         currentatom.eyegraphics.drawEllipse(15, -12, 8, 20);
         currentatom.eyegraphics.drawEllipse(-15, -12, 8, 20);
+
+        //TODO Remake Maxwell-Boltzman
     }
 }
 
