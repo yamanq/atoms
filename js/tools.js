@@ -95,7 +95,8 @@ function createAtom(index) {
     currentatom.electrongraphics = new PIXI.Graphics();
     currentatom.eyegraphics = new PIXI.Graphics();
     currentatom.electronText = new PIXI.Text("", {
-        font: "300% Oswald"
+        font: "300% Oswald",
+        color: "grey"
     });
     currentatom.electronText.position.x = -10;
     currentatom.electronText.position.y = -130;
