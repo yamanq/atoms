@@ -25,6 +25,7 @@ var eyegraphics;
 var electronText;
 var electroncount = 0;
 var numEl;
+var index;
 
 
 function tableDesc() {
@@ -86,7 +87,7 @@ function tableDesc() {
 
         cell.onclick = function() {
             lastElement = this;
-            var index = parseInt(this.childNodes[0].childNodes[0].nodeValue - 1);
+            index = parseInt(this.childNodes[0].childNodes[0].nodeValue - 1);
             for (var i = 0; i < p.length; i++) { // Loop through all data types to be displayed
                 if (i == 8 || i == 9) { // If data type is melting or boiling
                     if (info[p[i]][index] !== null) {
@@ -214,7 +215,7 @@ function tableDesc() {
                 sidegraphics = new PIXI.Graphics();
                 sidegraphics.interactive = true;
                 sidegraphics.buttonMode = true;
-                sidegraphics.on('click', createAtom(index));
+                sidegraphics.click = atomclick;
 
                 electrongraphics = new PIXI.Graphics();
                 electrongraphics.position.x = 150;
@@ -270,6 +271,10 @@ function animate(pass) {
     if (pass) {
         requestAnimationFrame(animate);
     }
+}
+
+var atomclick = function() {
+    createAtom(index);
 }
 
 function changeText(dom, text) {
