@@ -96,9 +96,12 @@ function createAtom(index) {
     currentatom.eyegraphics = new PIXI.Graphics();
     currentatom.electronText = new PIXI.Text("", {
         font: "300% Oswald",
-        color: "grey"
+        fill: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 3
     });
-    currentatom.electronText.position.x = -10;
+    console.log(currentatom.electronText.width / 2);
+    currentatom.electronText.position.x = -1 * currentatom.electronText.width;
     currentatom.electronText.position.y = -130;
 
     currentatom.stage.addChild(currentatom.graphics);
@@ -171,6 +174,7 @@ function mainAnimate() {
                 currentcoord.x < checking.x + 2 * atomradius &&
                 currentcoord.y + 2 * atomradius > checking.y &&
                 currentcoord.y < checking.y + 2 * atomradius &&
+                !checking.dragging && !currentatom.stage.dragging &&
                 Math.hypot(currentcoord.x - checking.x, currentcoord.y - checking.y) <= 2 * atomradius) {
 
                 var collided = atoms[x];
