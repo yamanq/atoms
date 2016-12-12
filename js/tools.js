@@ -47,7 +47,7 @@ function randn_bm(length) {
 }
 
 function atomVector() {
-    //TODO
+    //TODO Maxwell-Boltzman
     return {
         x: 25 * (Math.random() - 0.5),
         y: 25 * (Math.random() - 0.5)
@@ -177,6 +177,8 @@ function mainAnimate() {
                 !checking.dragging && !currentatom.stage.dragging &&
                 Math.hypot(currentcoord.x - checking.x, currentcoord.y - checking.y) <= 2 * atomradius) {
 
+                // TODO INTERACTIONS
+
                 var collided = atoms[x];
 
                 var norvector = [(checking.x - currentcoord.x), (checking.y - currentcoord.y)];
@@ -212,7 +214,7 @@ function mainAnimate() {
                     y: v1nnorvec[1] + v1ntanvec[1]
                 };
 
-                //TODO Replace with better method to cope with overlaps
+                // TODO Replace with better method to cope with overlaps
                 while (Math.pow(currentcoord.x - checking.x, 2) + Math.pow(currentcoord.y - checking.y, 2) <= Math.pow(2 * atomradius, 2)) {
                     collided.stage.x += collided.general.vector.x;
                     collided.stage.y += collided.general.vector.y;
