@@ -1,6 +1,27 @@
+//
+// Atoms - molecular interactions simulator
+// Copyright (C) 2016  Yaman Qalieh and Kenneth Jao
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+atomradius = 90;
 atoms = [];
 
-renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+var width = window.innerWidth;
+var height = window.innerHeight;
+renderer = PIXI.autoDetectRenderer(width, height, {
     transparent: true,
     antialias: true
 });
@@ -25,7 +46,18 @@ function randn_bm(length) {
     }
 }
 
+function atomVector() {
+    //TODO
+    return {
+        x: 25 * (Math.random() - 0.5),
+        y: 25 * (Math.random() - 0.5)
+    };
+}
+
 function createAtom(index) {
+    var xcenter = randn_bm(window.innerWidth);
+    var ycenter = randn_bm(window.innerHeight);
+
     atoms.push({
         stage: undefined,
         graphics: undefined,
@@ -34,7 +66,9 @@ function createAtom(index) {
         eyegraphics: undefined,
         general: {
             index: index,
-            random: 5 * Math.random()
+            random: 5 * Math.random(),
+            vector: atomVector(),
+            mass: info.moleWeig[index]
         }
     });
 
@@ -54,9 +88,6 @@ function createAtom(index) {
         .on('touchmove', onDragMove);
 
     currentatom.graphics = new PIXI.Graphics();
-
-    var xcenter = randn_bm(window.innerWidth);
-    var ycenter = randn_bm(window.innerHeight);
 
     currentatom.stage.position.x = xcenter;
     currentatom.stage.position.y = ycenter;
@@ -78,7 +109,7 @@ function createAtom(index) {
     currentatom.electronText.text = info.shorthand[index];
     currentatom.graphics.beginFill("0x" + bgColor.substring(1));
     currentatom.graphics.lineStyle(10, "0x" + changeColor(bgColor, 20).substring(1), 1);
-    currentatom.graphics.drawCircle(0, 0, 90);
+    currentatom.graphics.drawCircle(0, 0, atomradius);
 
     currentatom.eyegraphics.beginFill("0x" + changeColor(bgColor, -20).substring(1));
     currentatom.eyegraphics.lineStyle(3, "0xffffff");
@@ -100,11 +131,92 @@ function createAtom(index) {
 
 function mainAnimate() {
     pass = false;
+    var currentatom;
     for (var i = 0; i < atoms.length; i++) {
-        var currentatom = atoms[i];
+        currentatom = atoms[i];
+
+        if (!currentatom.stage.dragging) {
+            currentatom.stage.x += currentatom.general.vector.x;
+            currentatom.stage.y += currentatom.general.vector.y;
+        }
 
         currentatom.electrongraphics.rotation = count + currentatom.general.random;
         currentatom.eyegraphics.position.y = currentatom.electrongraphics.position.y + 5 * Math.sin(count * 0.5);
+    }
+    for (var j = 0; j < atoms.length; j++) {
+        currentatom = atoms[j];
+
+        // Wall Collisions
+        if (currentatom.stage.x - atomradius <= 0) {
+            currentatom.general.vector.x *= -1;
+            currentatom.stage.x = atomradius;
+        } else if (currentatom.stage.x + atomradius >= width) {
+            currentatom.general.vector.x *= -1;
+            currentatom.stage.x = width - atomradius;
+        } else if (currentatom.stage.y - atomradius <= 0) {
+            currentatom.general.vector.y *= -1;
+            currentatom.stage.y = atomradius;
+        } else if (currentatom.stage.y + atomradius >= height) {
+            currentatom.general.vector.y *= -1;
+            currentatom.stage.y = height - atomradius;
+        }
+
+        // Other Collisions
+        var currentcoord = currentatom.stage;
+        for (var x = j + 1; x < atoms.length; x++) {
+            var checking = atoms[x].stage;
+
+            if (currentcoord.x + 2 * atomradius > checking.x &&
+                currentcoord.x < checking.x + 2 * atomradius &&
+                currentcoord.y + 2 * atomradius > checking.y &&
+                currentcoord.y < checking.y + 2 * atomradius &&
+                Math.hypot(currentcoord.x - checking.x, currentcoord.y - checking.y) <= 2 * atomradius) {
+
+                var collided = atoms[x];
+
+                var norvector = [(checking.x - currentcoord.x), (checking.y - currentcoord.y)];
+                var nmag = Math.hypot(norvector[0], norvector[1]);
+
+                var unorvector = [norvector[0] / nmag, norvector[1] / nmag];
+                var utanvector = [-1 * unorvector[1], unorvector[0]];
+
+                var v1 = currentatom.general.vector;
+                var v2 = collided.general.vector;
+                var m1 = currentatom.general.mass;
+                var m2 = collided.general.mass;
+
+                var v1nor = unorvector[0] * v1.x + unorvector[1] * v1.y;
+                var v1tan = utanvector[0] * v1.x + utanvector[1] * v1.y;
+                var v2nor = unorvector[0] * v2.x + unorvector[1] * v2.y;
+                var v2tan = utanvector[0] * v2.x + utanvector[1] * v2.y;
+
+                var v1nnor = (v1nor * (m1 - m2) + 2 * m2 * v2nor) / (m1 + m2);
+                var v2nnor = (v2nor * (m2 - m1) + 2 * m1 * v1nor) / (m1 + m2);
+
+                var v1nnorvec = [unorvector[0] * v1nnor, unorvector[1] * v1nnor];
+                var v1ntanvec = [utanvector[0] * v1tan, utanvector[1] * v1tan];
+                var v2nnorvec = [unorvector[0] * v2nnor, unorvector[1] * v2nnor];
+                var v2ntanvec = [utanvector[0] * v2tan, utanvector[1] * v2tan];
+
+                collided.general.vector = {
+                    x: v2nnorvec[0] + v2ntanvec[0],
+                    y: v2nnorvec[1] + v2ntanvec[1]
+                };
+                currentatom.general.vector = {
+                    x: v1nnorvec[0] + v1ntanvec[0],
+                    y: v1nnorvec[1] + v1ntanvec[1]
+                };
+
+                //TODO Replace with better method to cope with overlaps
+                while (Math.pow(currentcoord.x - checking.x, 2) + Math.pow(currentcoord.y - checking.y, 2) <= Math.pow(2 * atomradius, 2)) {
+                    collided.stage.x += collided.general.vector.x;
+                    collided.stage.y += collided.general.vector.y;
+                    currentatom.stage.x += currentatom.general.vector.x;
+                    currentatom.stage.y += currentatom.general.vector.y;
+                }
+            }
+        }
+
     }
     count += 0.05;
     renderer.render(superstage);
@@ -122,10 +234,7 @@ function onDragStart(event) {
 
 function onDragEnd() {
     this.alpha = 1;
-
     this.dragging = false;
-
-    // set the interaction data to null
     this.data = null;
 }
 
